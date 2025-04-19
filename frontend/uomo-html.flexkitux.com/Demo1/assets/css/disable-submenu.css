@@ -1,0 +1,27 @@
+/* Ẩn tất cả các submenu */
+.sub-menu,
+.sub-menu__wrapper {
+  display: none !important;
+}
+
+/* Xóa các icon mũi tên */
+.navigation__link svg {
+  display: none !important;
+}
+
+/* Đảm bảo các menu chính có thể click được */
+.navigation__item > .navigation__link {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+/* Loại bỏ các hiệu ứng hover */
+.navigation__item:hover .sub-menu,
+.navigation__item:hover .sub-menu__wrapper {
+  display: none !important;
+}
+
+/* Đặt lại các thuộc tính position để tránh các vấn đề về layout */
+.navigation__item {
+  position: relative !important;
+}

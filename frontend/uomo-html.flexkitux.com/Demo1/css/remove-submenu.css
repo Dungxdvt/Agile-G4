@@ -1,0 +1,67 @@
+/* Vô hiệu hóa menu con */
+.sub-menu,
+.sub-menu__wrapper,
+.mega-menu,
+.box-menu,
+.default-menu {
+  display: none !important;
+}
+
+/* Vô hiệu hóa hiệu ứng hover */
+.navigation__item:hover .sub-menu,
+.navigation__item:hover .sub-menu__wrapper,
+.navigation__item:hover .mega-menu,
+.navigation__item:hover .box-menu,
+.navigation__item:hover .default-menu {
+  display: none !important;
+}
+
+/* Ẩn các phần tử menu con */
+.sub-menu__title,
+.sub-menu__list,
+.sub-menu__item,
+.mega-menu__media,
+.mega-menu__img {
+  display: none !important;
+}
+
+/* Xóa các icon mũi tên */
+.navigation__link svg {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Đảm bảo các menu chính có thể click được */
+.navigation__item > .navigation__link {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+/* Đặt lại các thuộc tính position để tránh các vấn đề về layout */
+.navigation__item {
+  position: relative !important;
+}
+
+/* Ẩn các phần tử submenu khi được thêm vào DOM */
+.sub-menu.d-none,
+.sub-menu__wrapper.d-none {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+.navigation__item > a {
+  pointer-events: auto !important;
+}
+
+.navigation__link {
+  cursor: pointer !important;
+}

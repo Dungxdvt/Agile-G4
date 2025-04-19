@@ -1,0 +1,97 @@
+@font-face {
+  font-family: "simple-line-icons";
+  src: url("../fonts/Simple-Line-Icons.eot?v=2.4.0");
+  src: url("../fonts/Simple-Line-Icons.eot?v=2.4.0#iefix")
+      format("embedded-opentype"),
+    url("../fonts/Simple-Line-Icons.woff2?v=2.4.0") format("woff2"),
+    url("../fonts/Simple-Line-Icons.ttf?v=2.4.0") format("truetype"),
+    url("../fonts/Simple-Line-Icons.woff?v=2.4.0") format("woff"),
+    url("../fonts/Simple-Line-Icons.svg?v=2.4.0#simple-line-icons")
+      format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  font-family: "simple-line-icons";
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-shopping-cart:before {
+  content: "\e04e";
+}
+
+.icon-search:before {
+  content: "\e090";
+}
+
+.icon-close:before {
+  content: "\e082";
+}
+
+.icon-bars:before {
+  content: "\e07c";
+}
+
+/* Cart styles */
+.cart-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.cart-dropdown .dropdown-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  padding: 0.5rem;
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background-color: #c96;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1;
+  margin-left: 0.2rem;
+}
+
+.icon-shopping-cart {
+  font-size: 2.3rem;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 1000;
+  min-width: 300px;
+  padding: 2rem;
+  margin: 0;
+  background-color: #fff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border: 0.1rem solid #ebebeb;
+}
+
+.cart-dropdown:hover .dropdown-menu {
+  display: block;
+}

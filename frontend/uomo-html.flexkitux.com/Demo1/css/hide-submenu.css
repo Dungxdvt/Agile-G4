@@ -1,0 +1,14 @@
+.box-menu,
+.mega-menu,
+.default-menu,
+.sub-menu__list {
+  display: none !important;
+}
+
+.navigation__item {
+  pointer-events: none;
+}
+
+.navigation__link {
+  pointer-events: auto;
+}

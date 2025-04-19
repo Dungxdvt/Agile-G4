@@ -1,0 +1,78 @@
+/* Dịch menu chính */
+.navigation__link[href="index.html"]:after {
+  content: "Trang chủ" !important;
+}
+
+.navigation__link[href="shop1.html"]:after {
+  content: "Cửa hàng" !important;
+}
+
+.navigation__link[href="blog_list1.html"]:after {
+  content: "Tin tức" !important;
+}
+
+.navigation__link[href="about.html"]:after {
+  content: "Giới thiệu" !important;
+}
+
+.navigation__link[href="contact.html"]:after {
+  content: "Liên hệ" !important;
+}
+
+/* Dịch các phần khác */
+.search-field__input::placeholder {
+  content: "Tìm kiếm sản phẩm" !important;
+}
+
+/* Dịch nút tìm kiếm */
+.search-popup__submit::after {
+  content: "Tìm kiếm" !important;
+}
+
+/* Dịch phần tài khoản */
+.customer-links span:after {
+  content: "Tài khoản của tôi" !important;
+}
+
+/* Dịch ngôn ngữ và tiền tệ */
+label[for="footerSettingsLanguage_mobile"]:after {
+  content: "Ngôn ngữ" !important;
+}
+
+label[for="footerSettingsCurrency_mobile"]:after {
+  content: "Tiền tệ" !important;
+}
+
+/* Dịch các tùy chọn ngôn ngữ */
+.footer-select__option[selected]:after {
+  content: "Việt Nam | Tiếng Việt" !important;
+}
+
+.footer-select__option[value="1"]:after {
+  content: "Hoa Kỳ | Tiếng Anh" !important;
+}
+
+.footer-select__option[value="2"]:after {
+  content: "Đức" !important;
+}
+
+.footer-select__option[value="3"]:after {
+  content: "Pháp" !important;
+}
+
+.footer-select__option[value="4"]:after {
+  content: "Thụy Điển" !important;
+}
+
+/* Dịch các tùy chọn tiền tệ */
+select[name="store-language"] option[selected]:after {
+  content: "₫ VND" !important;
+}
+
+select[name="store-language"] option[value="1"]:after {
+  content: "£ GBP" !important;
+}
+
+select[name="store-language"] option[value="2"]:after {
+  content: "€ EURO" !important;
+}
