@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="vi">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="flexkit" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="shortcut icon" href="https://uomo-html.flexkitux.com/images/favicon.ico" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.gstatic.com/" />
+
+    <!-- Phông chữ -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Allura&amp;display=swap" rel="stylesheet" />
+
+    <!-- Bảng định kiểu -->
+    <link rel="stylesheet" href="css/plugins/swiper.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/plugins/jquery.fancybox.css" type="text/css" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/remove-submenu.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+    <!-- Tiêu đề trang -->
+    <title>Lịch sử thanh toán | UOMO</title>
+
+    <style>
+        .payment-history {
+            padding: 20px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-filters {
+            margin-bottom: 20px;
+        }
+
+        .filter-options select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-width: 200px;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .orders-table th,
+        .orders-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .orders-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            padding: 6px 12px;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <!-- SVG Icons -->
+        <svg class="d-none">
+            <symbol id="icon_nav" viewBox="0 0 25 18">
+                <rect width="25" height="2" />
+                <rect y="8" width="20" height="2" />
+                <rect y="16" width="25" height="2" />
+            </symbol>
+            <symbol id="icon_search" viewBox="0 0 20 20">
+                <g clip-path="url(#clip0_6_7)">
+                    <path
+                        d="M8.80758 0C3.95121 0 0 3.95121 0 8.80758C0 13.6642 3.95121 17.6152 8.80758 17.6152C13.6642 17.6152 17.6152 13.6642 17.6152 8.80758C17.6152 3.95121 13.6642 0 8.80758 0ZM8.80758 15.9892C4.84769 15.9892 1.62602 12.7675 1.62602 8.80762C1.62602 4.84773 4.84769 1.62602 8.80758 1.62602C12.7675 1.62602 15.9891 4.84769 15.9891 8.80758C15.9891 12.7675 12.7675 15.9892 8.80758 15.9892Z"
+                        fill="currentColor" />
+                    <path
+                        d="M19.7618 18.6122L15.1006 13.9509C14.783 13.6333 14.2686 13.6333 13.951 13.9509C13.6334 14.2683 13.6334 14.7832 13.951 15.1005L18.6122 19.7618C18.771 19.9206 18.9789 20 19.187 20C19.3949 20 19.603 19.9206 19.7618 19.7618C20.0795 19.4444 20.0795 18.9295 19.7618 18.6122Z"
+                        fill="currentColor" />
+                </g>
+            </symbol>
+            <symbol id="icon_cart" viewBox="0 0 20 20">
+                <path
+                    d="M17.6562 4.6875H15.2755C14.9652 2.05164 12.7179 0 10 0C7.28215 0 5.0348 2.05164 4.72445 4.6875H2.34375C1.91227 4.6875 1.5625 5.03727 1.5625 5.46875V19.2188C1.5625 19.6502 1.91227 20 2.34375 20H17.6562C18.0877 20 18.4375 19.6502 18.4375 19.2188V5.46875C18.4375 5.03727 18.0877 4.6875 17.6562 4.6875ZM10 1.5625C11.8548 1.5625 13.3992 2.91621 13.6976 4.6875H6.30238C6.60082 2.91621 8.14516 1.5625 10 1.5625ZM16.875 18.4375H3.125V6.25H4.6875V8.59375C4.6875 9.02523 5.03727 9.375 5.46875 9.375C5.90023 9.375 6.25 9.02523 6.25 8.59375V6.25H13.75V8.59375C13.75 9.02523 14.0998 9.375 14.5312 9.375C14.9627 9.375 15.3125 9.02523 15.3125 8.59375V6.25H16.875V18.4375Z"
+                    fill="currentColor" />
+            </symbol>
+            <symbol id="icon_user" viewBox="0 0 20 20">
+                <path
+                    d="M10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0ZM10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2ZM10 4C8.34315 4 7 5.34315 7 7C7 8.65685 8.34315 10 10 10C11.6569 10 13 8.65685 13 7C13 5.34315 11.6569 4 10 4ZM10 6C10.5523 6 11 6.44772 11 7C11 7.55228 10.5523 8 10 8C9.44772 8 9 7.55228 9 7C9 6.44772 9.44772 6 10 6ZM10 11C7.23858 11 5 13.2386 5 16H7C7 14.3431 8.34315 13 10 13C11.6569 13 13 14.3431 13 16H15C15 13.2386 12.7614 11 10 11Z"
+                    fill="currentColor" />
+            </symbol>
+            <symbol id="icon_heart" viewBox="0 0 20 20">
+                <path
+                    d="M10 18.35L8.55 17.03C3.4 12.36 0 9.28 0 5.5C0 2.42 2.42 0 5.5 0C7.24 0 8.91 1.01 10 2.09C11.09 1.01 12.76 0 14.5 0C17.58 0 20 2.42 20 5.5C20 9.28 16.6 12.36 11.45 17.04L10 18.35Z"
+                    fill="currentColor" />
+            </symbol>
+        </svg>
+
+        <!-- Header -->
+        <header id="header" class="header header_sticky">
+            <div class="container">
+                <div class="header-desk header-desk_type_1">
+                    <div class="logo">
+                        <a href="index.html">
+                            <img src="../images/logo.png" alt="Uomo" class="logo__image d-block" />
+                        </a>
+                    </div>
+
+                    <nav class="navigation">
+                        <ul class="navigation__list list-unstyled d-flex">
+                            <li class="navigation__item">
+                                <a href="index.html" class="navigation__link">Trang chủ</a>
+                            </li>
+                            <li class="navigation__item">
+                                <a href="shop1.html" class="navigation__link">Cửa hàng</a>
+                            </li>
+                            <li class="navigation__item">
+                                <a href="blog_list1.html" class="navigation__link">Blog</a>
+                            </li>
+                            <li class="navigation__item">
+                                <a href="about.html" class="navigation__link">Giới thiệu</a>
+                            </li>
+                            <li class="navigation__item">
+                                <a href="contact.html" class="navigation__link">Liên hệ</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div class="header-tools d-flex align-items-center">
+                        <div class="header-tools__item hover-container">
+                            <div class="js-hover__open position-relative">
+                                <a class="js-search-popup search-field__actor" href="#">
+                                    <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <use href="#icon_search" />
+                                    </svg>
+                                    <i class="btn-icon btn-close-lg"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="header-tools__item hover-container">
+                            <div class="js-hover__open position-relative">
+                                <a class="header-tools__link" href="account_dashboard.html">
+                                    <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <use href="#icon_user" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="header-tools__item hover-container">
+                            <div class="js-hover__open position-relative">
+                                <a class="header-tools__link" href="cart.html">
+                                    <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <use href="#icon_cart" />
+                                    </svg>
+                                    <span class="header-tools__count">0</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="header-tools__item hover-container">
+                            <div class="js-hover__open position-relative">
+                                <a class="header-tools__link" href="wishlist.html">
+                                    <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <use href="#icon_heart" />
+                                    </svg>
+                                    <span class="header-tools__count">0</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <div class="page-header">
+                    <h1 class="page-title">Lịch sử thanh toán</h1>
+                </div>
+
+                <div class="payment-history">
+                    <!-- Filter Section -->
+                    <div class="payment-filters">
+                        <div class="filter-options">
+                            <select>
+                                <option value="all">Tất cả giao dịch</option>
+                                <option value="success">Thành công</option>
+                                <option value="pending">Đang xử lý</option>
+                                <option value="failed">Thất bại</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Payment List -->
+                    <div class="page-content my-account__orders-list">
+                        <table class="orders-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã đơn hàng</th>
+                                    <th>Thời gian</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Trạng thái</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payment-list">
+                                <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer footer_type_1">
+            <div class="footer-middle container">
+                <div class="row row-cols-lg-5 row-cols-2">
+                    <div class="footer-column footer-store-info col-12 mb-4 mb-lg-0">
+                        <div class="logo">
+                            <a href="index.html">
+                                <img src="../images/logo.png" alt="Uomo" class="logo__image d-block" />
+                            </a>
+                        </div>
+                        <p class="footer-address">
+                            1418 River Drive, Suite 35 Cottonhall, CA 9622 United States
+                        </p>
+                        <p class="footer-email">
+                            <a href="mailto:support@uomo.com">hotro@uomo.com</a>
+                        </p>
+                        <p class="footer-phone">
+                            <a href="tel:+1234567890">+1 (234) 567 890</a>
+                        </p>
+                    </div>
+
+                    <div class="footer-column footer-menu col-6 col-lg">
+                        <h6 class="footer-title">Công ty</h6>
+                        <ul class="footer-menu__list list-unstyled">
+                            <li class="footer-menu__item">
+                                <a href="about.html" class="footer-menu__link">Về chúng tôi</a>
+                            </li>
+                            <li class="footer-menu__item">
+                                <a href="contact.html" class="footer-menu__link">Liên hệ</a>
+                            </li>
+                            <li class="footer-menu__item">
+                                <a href="store_location.html" class="footer-menu__link">Vị trí cửa hàng</a>
+                            </li>
+                            <li class="footer-menu__item">
+                                <a href="careers.html" class="footer-menu__link">Tuyển dụng</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column footer-menu col-6 col-lg">
+                        <h6 class="footer-title">Cửa hàng</h6>
+                        <ul class="footer-menu__list list-unstyled">
+                            <li class="footer-menu__item">
+                                <a href="shop1.html" class="footer-menu__link">Cửa hàng</a>
+                            </li>
+                            <li class="footer-menu__item">
+                                <a href="shop_cart.html" class="footer-menu__link">Giỏ hàng</a>
+                            </li>
+                            <li class="footer-menu__item">
+                                <a href="shop_wishlist.html" class="footer-menu__link">Yêu thích</a>
+                            </li>
+                            <li class="footer-menu__item">
+                                <a href="shop_compare.html" class="footer-menu__link">So sánh</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column footer-menu col-6 col-lg">
+                        <h6 class="footer-title">Trợ giúp</h6>
+                        <ul class="footer-menu__list list-unstyled">
+                            <li class="footer-menu__item">
+                                <a href="faq.html" class="footer-menu__link">Câu hỏi thường gặp</a>
+                            </li>
+                            <li class="footer-menu__item">
+                                <a href="shipping.html" class="footer-menu__link">Vận chuyển</a>
+                            </li>
+                            <li class="footer-menu__item">
+                                <a href="returns.html" class="footer-menu__link">Đổi trả</a>
+                            </li>
+                            <li class="footer-menu__item">
+                                <a href="terms.html" class="footer-menu__link">Điều khoản & Điều kiện</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column footer-newsletter col-12 col-lg">
+                        <h6 class="footer-title">Bản tin</h6>
+                        <p class="footer-newsletter__text">
+                            Đăng ký nhận bản tin của chúng tôi và nhận giảm giá 10% cho đơn hàng đầu tiên
+                        </p>
+                        <form class="footer-newsletter__form">
+                            <div class="input-group">
+                                <input type="email" class="form-control" placeholder="Địa chỉ email của bạn" />
+                                <button class="btn btn-primary" type="submit">Đăng ký</button>
+                            </div>
+                        </form>
+                        <div class="footer-payment">
+                            <img src="../images/payment.png" alt="Phương thức thanh toán"
+                                class="footer-payment__image" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p class="footer-copyright">
+                            &copy; 2024 Uomo. Đã đăng ký bản quyền.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="footer-settings d-flex justify-content-md-end">
+                            <div class="footer-settings__item">
+                                <select class="form-select">
+                                    <option value="en">Tiếng Anh</option>
+                                    <option value="vi">Tiếng Việt</option>
+                                </select>
+                            </div>
+                            <div class="footer-settings__item">
+                                <select class="form-select">
+                                    <option value="usd">USD</option>
+                                    <option value="vnd">VND</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Mobile Footer -->
+        <footer class="footer-mobile container w-100 px-5 d-md-none bg-body">
+            <div class="row text-center">
+                <div class="col-4">
+                    <a href="index.html" class="footer-mobile__link">
+                        <svg class="d-block mx-auto mb-1" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <use href="#icon_home" />
+                        </svg>
+                        <span class="footer-mobile__text">Trang chủ</span>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a href="shop1.html" class="footer-mobile__link">
+                        <svg class="d-block mx-auto mb-1" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <use href="#icon_shop" />
+                        </svg>
+                        <span class="footer-mobile__text">Cửa hàng</span>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a href="wishlist.html" class="footer-mobile__link">
+                        <svg class="d-block mx-auto mb-1" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <use href="#icon_heart" />
+                        </svg>
+                        <span class="footer-mobile__text">Yêu thích</span>
+                        <span class="footer-mobile__count">0</span>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- External JavaScripts -->
+    <script src="js/plugins/jquery.min.js"></script>
+    <script src="js/plugins/bootstrap.bundle.min.js"></script>
+    <script src="js/plugins/bootstrap-slider.min.js"></script>
+    <script src="js/plugins/swiper.min.js"></script>
+    <script src="js/plugins/countdown.js"></script>
+    <script src="js/plugins/jquery.fancybox.js"></script>
+
+    <!-- Footer Scripts -->
+    
+  
+  <script src="js/cart.js"></script>
+  <script src="js/product.js"></script>
+  <script src="js/cart-drawer.js"></script>
+  <script src="js/theme.js"></script>
+    <script>
+        // Danh sách sản phẩm mẫu
+        const products = [
+            { name: "Áo Hoodie Nam ICONDENIM ft MARVEL Deadpool", price: "399.000" },
+            { name: "Kirby T-Shirt", price: "17.000" },
+            { name: "Calvin Shorts", price: "62.000" },
+            { name: "Cotton Jersey T-Shirt", price: "17.000" },
+            { name: "Colorful Jacket", price: "29.000" },
+            { name: "Cableknit Shawl", price: "99.000" },
+            { name: "Zessi Dresses", price: "99.000" }
+        ];
+
+        // Lấy dữ liệu từ account_orders.html
+        $(document).ready(function () {
+            $.get('account_orders.html', function (data) {
+                var $orders = $(data).find('.orders-table tbody tr');
+                if ($orders.length > 0) {
+                    $orders.each(function () {
+                        var $row = $(this);
+                        var orderId = $row.find('td:first').text();
+                        var date = new Date().toLocaleString('vi-VN'); // Thời gian hiện tại
+                        var randomProduct = products[Math.floor(Math.random() * products.length)];
+                        var status = $row.find('td:eq(2)').text();
+                        var total = randomProduct.price;
+
+                        var $newRow = $('<tr>');
+                        $newRow.append($('<td>').text(orderId));
+                        $newRow.append($('<td>').text(date));
+                        $newRow.append($('<td>').text(randomProduct.name));
+                        $newRow.append($('<td>').text(status));
+                        $newRow.append($('<td>').text(total + 'đ'));
+                        $newRow.append($('<td>').html('<button class="btn btn-primary">XEM</button>'));
+
+                        $('#payment-list').append($newRow);
+                    });
+                } else {
+                    $('#payment-list').html('<tr><td colspan="6" class="text-center">Không có giao dịch nào</td></tr>');
+                }
+            });
+        });
+    </script>
+
+  
+  
+  </body>
+
+</html>
