@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <span class="subtotal">${formatPrice(cartData.total)}đ</span>
                 </div>
                 <div class="cart-drawer__buttons mt-4">
-                    <a href="shop_cart.html" class="btn btn-outline-primary w-100 mb-3">Xem giỏ hàng</a>
+                    <a href="payment-history.html" class="btn btn-outline-primary w-100 mb-3">Xem giỏ hàng</a>
                     <a href="shop_checkout.html" class="btn btn-primary w-100">Thanh toán</a>
                 </div>
             `;
