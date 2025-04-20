@@ -157,7 +157,6 @@
     .cart-drawer-item .qty-control__increase.text-end {
       text-align: center !important;
     }
-
     .cart-drawer-item .qty-control__reduce {
       left: 0;
     }
@@ -198,68 +197,21 @@
       height: 100vh;
       background: #fff;
       z-index: 1100;
-      transition: all 0.3s ease;
-      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     }
 
-    .cart-drawer.aside--active {
-      right: 0;
+    /* Fix for login section */
+    .aside {
+      z-index: 1200 !important; /* Higher than overlay */
     }
 
-    .cart-drawer-items-list {
-      padding: 15px;
-      max-height: calc(100vh - 200px);
-      overflow-y: auto;
-    }
-
-    .cart-drawer-actions {
-      background: #fff;
-      padding: 20px;
-      border-top: 1px solid #eee;
-    }
-
-    .cart-drawer-subtotal {
-      padding: 15px;
-      background: #f8f9fa;
-      border-top: 1px solid #eee;
-    }
-
-    .cart-drawer-subtotal__price {
-      font-size: 16px;
-      font-weight: 600;
-      color: #333;
-    }
-
-    .cart-drawer-subtotal__price::after {
-      content: "đ";
-      margin-left: 2px;
-    }
-
-    /* Format price with dot separators */
-    .format-price {
-      text-align: right;
+    .aside_visible {
+      opacity: 1 !important;
+      pointer-events: auto !important;
     }
 
     .page-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1099;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
+      z-index: 1099 !important; /* Lower than aside */
     }
-
-    .overflow-hidden .page-overlay {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    /* Search and Filter Styles */
-    /* Container for the search filter section */
 .search-filter-section {
     display: flex;
     align-items: stretch; /* Stretch items to the same height */
