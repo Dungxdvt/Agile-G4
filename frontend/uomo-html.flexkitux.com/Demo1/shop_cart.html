@@ -29,6 +29,146 @@
 
   <!-- Document Title -->
   <title>Giỏ hàng</title>
+  <style>
+        .container-ps {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .review-form-ps {
+      margin-bottom: 30px;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      resize: none;
+    }
+    .stars-ps {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 10px;
+      color: #ccc;
+      font-size: 25px;
+      cursor: pointer;
+    }
+    .stars-ps span.selected-ps {
+      color: gold;
+    }
+    button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .review-list-ps .review-ps {
+      border-top: 1px solid #ddd;
+      padding-top: 15px;
+      margin-top: 15px;
+    }
+    .review-ps .stars-ps {
+      font-size: 18px;
+    }
+    .review-ps .username-ps {
+      font-weight: bold;
+    }
+    .review-ps .date-ps {
+      font-size: 12px;
+      color: gray;
+    }
+    .rating-summary-ps {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .rating-number-ps {
+      font-size: 48px;
+      color: #ff9900;
+      font-weight: bold;
+    }
+    .bar-group-ps {
+      margin-top: 20px;
+    }
+    .bar-item-ps {
+      display: flex;
+      align-items: center;
+      margin: 5px 0;
+    }
+    .bar-label-ps {
+      width: 40px;
+    }
+    .bar-ps {
+      flex: 1;
+      height: 10px;
+      background: #e0e0e0;
+      border-radius: 5px;
+      margin-left: 10px;
+      margin-right: 10px;
+      position: relative;
+    }
+    .bar-fill-ps {
+      height: 100%;
+      background: #ff0000;
+      border-radius: 5px;
+    }
+    .comments-ps {
+      margin-top: 30px;
+    }
+    .comment-ps {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+    .comment-user-ps {
+      font-weight: bold;
+    }
+    .comment-time-ps {
+      color: gray;
+      font-size: 12px;
+    }
+    .input-box-ps {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .submit-button-ps {
+      padding: 10px 20px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      align-self: flex-end;
+    }
+    .filter-stars-ps {
+      margin: 15px 0;
+    }
+    .filter-stars-ps button {
+      margin-right: 5px;
+      padding: 6px 10px;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #000;
+    }
+    .filter-stars-ps button.active-ps {
+      background-color: #c00;
+      color: #fff;
+    }
+  </style>
 </head>
 
 <body>
@@ -777,6 +917,162 @@
   </main>
 
   <div class="mb-5 pb-xl-5"></div>
+  <script>
+    function setActiveFilter(button) {
+      document.querySelectorAll('.filter-stars-ps button').forEach(btn => {
+        btn.classList.remove('active-ps');
+      });
+      button.classList.add('active-ps');
+      const star = button.innerText.replace('★', '').trim();
+      const comments = document.querySelectorAll('.comment-ps');
+      comments.forEach(comment => {
+        if (star === 'Tất cả') {
+          comment.style.display = 'block';
+        } else {
+          comment.style.display = comment.dataset.rating === star ? 'block' : 'none';
+        }
+      });
+    }
+
+    function addComment() {
+      const textArea = document.querySelector('textarea');
+      const commentText = textArea.value.trim();
+      const selectedButton = document.querySelector('.filter-stars-ps button.active-ps');
+      const rating = selectedButton.innerText.replace('★', '').trim();
+
+      if (!commentText) return;
+
+      const commentsDiv = document.querySelector('.comments-ps');
+      const newComment = document.createElement('div');
+      newComment.className = 'comment-ps';
+      newComment.dataset.rating = rating === 'Tất cả' ? '5' : rating;
+      newComment.innerHTML = `
+        <div class="comment-user-ps">Người dùng <span class="comment-time-ps">- Vừa xong</span></div>
+        <div class="comment-text-ps">${commentText}</div>
+      `;
+
+      commentsDiv.appendChild(newComment);
+      textArea.value = '';
+    }
+  </script>
+
+  <div class="container-ps">
+    <h2>Đánh giá và bình luận</h2>
+    <div class="rating-summary-ps">
+      <div class="rating-number-ps">4.9</div>
+      <div>
+        <div class="stars-ps">★★★★★</div>
+        <div>13 lượt đánh giá</div>
+      </div>
+    </div>
+
+    <div class="bar-group-ps">
+      <div class="bar-item-ps"><div class="bar-label-ps">5★</div><div class="bar-ps"><div class="bar-fill-ps" style="width: 46%"></div></div><div>6</div></div>
+      <div class="bar-item-ps"><div class="bar-label-ps">4★</div><div class="bar-ps"><div class="bar-fill-ps" style="width: 38%"></div></div><div>5</div></div>
+      <div class="bar-item-ps"><div class="bar-label-ps">3★</div><div class="bar-ps"><div class="bar-fill-ps" style="width: 15%"></div></div><div>2</div></div>
+      <div class="bar-item-ps"><div class="bar-label-ps">2★</div><div class="bar-ps"><div class="bar-fill-ps" style="width: 0%"></div></div><div>0</div></div>
+      <div class="bar-item-ps"><div class="bar-label-ps">1★</div><div class="bar-ps"><div class="bar-fill-ps" style="width: 0%"></div></div><div>0</div></div>
+    </div>
+
+    <div class="filter-stars-ps">
+      <button class="active-ps" onclick="setActiveFilter(this)">Tất cả</button>
+      <button onclick="setActiveFilter(this)">5★</button>
+      <button onclick="setActiveFilter(this)">4★</button>
+      <button onclick="setActiveFilter(this)">3★</button>
+      <button onclick="setActiveFilter(this)">2★</button>
+      <button onclick="setActiveFilter(this)">1★</button>
+    </div>
+  </div>
+
+  <div class="container-ps">
+    <input type="hidden" id="user-email" value="nguyenvana@gmail.com">
+    <label>Chấm sao:</label>
+    <div class="stars-ps" id="star-rating">
+      <span data-value="1">&#9733;</span>
+      <span data-value="2">&#9733;</span>
+      <span data-value="3">&#9733;</span>
+      <span data-value="4">&#9733;</span>
+      <span data-value="5">&#9733;</span>
+    </div>
+    <div class="review-form-ps">
+      <label>Bình luận:</label>
+      <textarea id="comment" rows="4" placeholder="Nhận xét của bạn..."></textarea>
+      <button onclick="submitReview()">Gửi đánh giá</button>
+    </div>
+
+    <div class="review-list-ps" id="review-list">
+      <div class="review-ps">
+        <h4>Nguyễn Văn A <span class="stars-ps" style="color: gold;">★★★★★</span></h4>
+        <p class="review-date-ps">Ngày đánh giá: 15/04/2025</p>
+        <p>Sản phẩm rất tốt, chất lượng vượt mong đợi. Giao hàng nhanh, đóng gói cẩn thận. Sẽ ủng hộ thêm!</p>
+      </div>
+
+      <div class="review-ps">
+        <h4>Trần Thị B <span class="stars-ps" style="color: gold;">★★★★☆</span></h4>
+        <p class="review-date-ps">Ngày đánh giá: 14/04/2025</p>
+        <p>Hàng ổn trong tầm giá. Tuy nhiên, màu sắc hơi khác một chút so với hình ảnh. Vẫn hài lòng!</p>
+      </div>
+
+      <div class="review-ps">
+        <h4>Lê Văn C <span class="stars-ps" style="color: gold;">★★★☆☆</span></h4>
+        <p class="review-date-ps">Ngày đánh giá: 13/04/2025</p>
+        <p>Chất lượng trung bình, giao hàng hơi chậm. Cần cải thiện thêm.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedRating = 0;
+
+    const stars = document.querySelectorAll("#star-rating span");
+    stars.forEach(star => {
+      star.addEventListener("click", () => {
+        selectedRating = parseInt(star.getAttribute("data-value"));
+        stars.forEach(s => s.classList.remove("selected-ps"));
+        for (let i = 0; i < selectedRating; i++) {
+          stars[i].classList.add("selected-ps");
+        }
+      });
+    });
+
+    function getUsernameFromEmail(email) {
+      const username = email.split('@')[0];
+      return username.charAt(0).toUpperCase() + username.slice(1);
+    }
+
+    function submitReview() {
+      const email = document.getElementById("user-email").value;
+      const username = getUsernameFromEmail(email);
+      const comment = document.getElementById("comment").value.trim();
+
+      if (!comment || selectedRating === 0) {
+        alert("Vui lòng nhập bình luận và chọn số sao.");
+        return;
+      }
+
+      const reviewList = document.getElementById("review-list");
+      const reviewItem = document.createElement("div");
+      reviewItem.classList.add("review-ps");
+
+      const date = new Date().toLocaleDateString("vi-VN");
+
+      let starsHtml = "";
+      for (let i = 1; i <= 5; i++) {
+        starsHtml += `<span style="color: ${i <= selectedRating ? 'gold' : '#ccc'};">&#9733;</span>`;
+      }
+
+      reviewItem.innerHTML = `
+        <h4>${username} <span class="stars-ps">${starsHtml}</span></h4>
+        <p class="review-date-ps">Ngày đánh giá: ${date}</p>
+        <p>${comment}</p>
+      `;
+
+      reviewList.appendChild(reviewItem);
+      document.getElementById("comment").value = "";
+      selectedRating = 0;
+      stars.forEach(s => s.classList.remove("selected-ps"));
+    }
+  </script>
 
   <!-- Footer Type 1 -->
   <footer class="footer footer_type_1">
