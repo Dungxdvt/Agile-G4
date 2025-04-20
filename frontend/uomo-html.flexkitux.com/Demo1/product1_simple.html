@@ -337,6 +337,143 @@
       outline: none;
       border-color: #333;
     }
+
+    /* NEW STYLES FOR PRODUCT PAGE QUANTITY AND SIZE SELECTION */
+
+    /* Size Selection Styling */
+    .swatch-size {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .swatch-size .swatch-item {
+      margin-bottom: 5px;
+    }
+
+    .swatch-size .size-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 45px;
+      height: 45px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background-color: #fff;
+    }
+
+    .swatch-size input[type="radio"]:checked+.size-label {
+      background-color: #000;
+      color: #fff;
+      border-color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .swatch-size .size-label:hover {
+      border-color: #000;
+      transform: translateY(-2px);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Quantity Control Styling */
+    .product-single__addtocart {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .product-single__addtocart .qty-control {
+      position: relative;
+      width: 120px;
+      height: 45px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .product-single__addtocart .qty-control__number {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 100%;
+      border: none;
+      background: transparent;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 0;
+      margin: 0;
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+
+    /* Hide spinner buttons */
+    .product-single__addtocart .qty-control__number::-webkit-outer-spin-button,
+    .product-single__addtocart .qty-control__number::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .product-single__addtocart .qty-control__reduce,
+    .product-single__addtocart .qty-control__increase {
+      position: absolute;
+      top: 0;
+      width: 40px;
+      height: 100%;
+      background: #f5f5f5;
+      color: #333;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+      user-select: none;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .product-single__addtocart .qty-control__reduce {
+      left: 0;
+      border-right: 1px solid #ddd;
+    }
+
+    .product-single__addtocart .qty-control__increase {
+      right: 0;
+      border-left: 1px solid #ddd;
+    }
+
+    .product-single__addtocart .qty-control__reduce:hover,
+    .product-single__addtocart .qty-control__increase:hover {
+      background: #e0e0e0;
+      color: #000;
+    }
+
+    .product-single__addtocart .btn-addtocart {
+      flex: 1;
+      height: 45px;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+    }
+
+    .product-single__addtocart .btn-addtocart:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
   </style>
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -1053,7 +1190,8 @@
 
             <div class="product-single__addtocart">
               <div class="qty-control position-relative">
-                <input type="number" name="quantity" value="1" min="1" class="qty-control__number text-center" />
+                <input type="number" name="quantity" value="1" min="1" class="qty-control__number text-center"
+                  data-initialized="false" />
                 <div class="qty-control__reduce">-</div>
                 <div class="qty-control__increase">+</div>
               </div>

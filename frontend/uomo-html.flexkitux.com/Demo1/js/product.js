@@ -69,26 +69,4 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-
-    // Quantity increase/decrease buttons handler
-    const increaseButtons = document.querySelectorAll('.qty-control__increase');
-    const decreaseButtons = document.querySelectorAll('.qty-control__reduce');
-
-    increaseButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const input = this.parentElement.querySelector('input[name="quantity"]');
-            const currentQuantity = parseInt(input.value);
-            input.value = currentQuantity + 1;
-        });
-    });
-
-    decreaseButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const input = this.parentElement.querySelector('input[name="quantity"]');
-            const currentQuantity = parseInt(input.value);
-            if (currentQuantity > 1) {
-                input.value = currentQuantity - 1;
-            }
-        });
-    });
 }); 
