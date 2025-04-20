@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="zxx">
+<!-- Mirrored from uomo-html.flexkitux.com/Demo1/shop_cart.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 03 Mar 2025 14:38:50 GMT -->
 
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -19,463 +20,17 @@
   <link rel="stylesheet" href="css/plugins/jquery.fancybox.css" type="text/css" />
   <link rel="stylesheet" href="css/style.css" type="text/css" />
   <link rel="stylesheet" href="css/cart.css" type="text/css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
   <link rel="stylesheet" href="css/remove-submenu.css" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!--[if lt IE 9]>
+      <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+
+  <!-- Document Title -->
+  <title>Giỏ hàng</title>
   <style>
-    /* Product Form Swatches */
-    .product-form__item {
-      margin-bottom: 1.5rem;
-    }
-
-    /* Fix for cart drawer */
-    .cart-drawer {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 100%;
-      max-width: 400px;
-      height: 100vh;
-      background: #fff;
-      z-index: 1200 !important;
-      /* Higher than overlay */
-      transition: all 0.3s ease;
-      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .cart-drawer.active {
-      right: 0;
-    }
-
-    .page-overlay {
-      z-index: 1099 !important;
-      /* Lower than cart drawer */
-    }
-
-    /* Rest of existing styles */
-    .swatch-color .swatch-label {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: block;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: all 0.2s ease;
-    }
-
-    .swatch-size input:checked+.size-label {
-      background: #000;
-      color: #fff;
-      border-color: #000;
-    }
-
-    .swatch-item {
-      position: relative;
-    }
-
-    .form-label {
-      font-weight: 500;
-      margin-bottom: 8px;
-      color: #000;
-    }
-
-    .color-options {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .color-option {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-      position: relative;
-      border: 2px solid transparent;
-    }
-
-    .color-option input[type="radio"] {
-      position: absolute;
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-    }
-
-    .color-option input[type="radio"]:checked+.color-circle {
-      border: 2px solid #000;
-      transform: scale(1.1);
-    }
-
-    .color-circle {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      display: block;
-      transition: all 0.3s ease;
-    }
-
-    /* Fix for header wishlist icon */
-    .header-tools__item[href="account_wishlist.html"] svg {
-      width: 20px !important;
-      /* Add px unit and !important */
-      height: 20px !important;
-      /* Add px unit and !important */
-      stroke: currentColor !important;
-      /* Ensure stroke inherits color */
-      fill: none !important;
-      /* Keep fill as none */
-      stroke-width: 1.5px !important;
-      /* Adjust stroke width */
-    }
-
-    /* Cart Drawer Item Styling */
-    .cart-drawer-item {
-      /* Ensure display: flex is applied (it should be from d-flex class) */
-      display: flex;
-      align-items: flex-start;
-      /* Align items to the top */
-      padding-bottom: 15px;
-      /* Add space below each item */
-      margin-bottom: 15px;
-      /* Add space below each item */
-      border-bottom: 1px solid #eee;
-      /* Add separator line */
-      gap: 15px;
-      /* Add gap between image and info */
-      min-height: 145px;
-      /* Set minimum height */
-    }
-
-    .aside-content {
-      padding-top: 0px 15px !important;
-    }
-
-    .cart-drawer-item:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
-
-    .cart-drawer-item__img {
-      width: 100px;
-      /* Adjust image size if needed */
-      height: auto;
-      object-fit: cover;
-    }
-
-    .cart-drawer-item__info {
-      display: flex;
-      flex-direction: column;
-      /* Removed justify-content: space-between; */
-      /* Removed flex-grow: 1; */
-    }
-
-    .cart-drawer-item__title a {
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 1.3;
-      /* Adjust line height for title */
-      margin-bottom: 0px;
-    }
-
-    .cart-drawer-item__option {
-      font-size: 13px;
-      /* Smaller font for options */
-      margin-bottom: 3px;
-      line-height: 1.2;
-    }
-
-    .cart-drawer-item .d-flex {
-      margin-top: 8px !important;
-      /* More space above quantity/price row */
-    }
-
-    .cart-drawer-item .qty-control {
-      /* Style for the container */
-      display: block;
-      /* Reset display */
-      position: relative;
-      width: 100px;
-      /* Fixed width to ensure space for all elements */
-      height: 32px;
-      /* Fixed height */
-      border: 1px solid #e5e5e5;
-      border-radius: 4px;
-      background: #fff;
-      overflow: hidden;
-      /* Keep children within */
-    }
-
-    .cart-drawer-item .qty-control__number {
-      /* Style for the input */
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100% !important;
-      /* Full width */
-      height: 30px !important;
-      /* Slightly less than container */
-      border: none;
-      background: transparent;
-      text-align: center;
-      font-size: 14px;
-      padding: 0;
-      z-index: 1;
-      /* Above background, below buttons */
-      -moz-appearance: textfield !important;
-      appearance: textfield !important;
-    }
-
-    /* Hide spinner buttons */
-    .cart-drawer-item .qty-control__number::-webkit-outer-spin-button,
-    .cart-drawer-item .qty-control__number::-webkit-inner-spin-button {
-      -webkit-appearance: none !important;
-      margin: 0 !important;
-    }
-
-    .cart-drawer-item .qty-control__reduce,
-    .cart-drawer-item .qty-control__increase {
-      /* Style for the +/- buttons */
-      position: absolute;
-      top: 0;
-      width: 30px;
-      height: 30px;
-      background: #f5f5f5;
-      color: #333;
-      font-size: 18px;
-      /* Slightly larger font */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 2;
-      /* Above input */
-      user-select: none;
-      /* Prevent selection */
-    }
-
-    /* Remove text alignment styles that might conflict */
-    .cart-drawer-item .qty-control__reduce.text-start,
-    .cart-drawer-item .qty-control__increase.text-end {
-      text-align: center !important;
-    }
-
-    .cart-drawer-item .qty-control__reduce {
-      left: 0;
-    }
-
-    .cart-drawer-item .qty-control__increase {
-      right: 0;
-    }
-
-    .cart-drawer-item .qty-control__reduce:hover,
-    .cart-drawer-item .qty-control__increase:hover {
-      background: #e0e0e0;
-    }
-
-    .cart-drawer-item__price {
-      font-weight: 500;
-      margin-left: auto;
-      /* Push price to the right */
-      padding-left: 10px;
-      /* Add some space */
-    }
-
-    .cart-drawer-divider {
-      display: none;
-      /* Hide the original hr divider */
-    }
-
-    /* Quantity control styles */
-    .cart-drawer-item__quantity {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin-top: 10px;
-      background: #f5f5f5;
-      padding: 5px;
-      border-radius: 4px;
-      width: fit-content;
-    }
-
-    .cart-drawer-item__quantity button {
-      background: #fff;
-      border: 1px solid #ddd;
-      width: 25px;
-      height: 25px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      border-radius: 4px;
-      font-size: 14px;
-      color: #333;
-      transition: all 0.3s ease;
-    }
-
-    .cart-drawer-item__quantity button:hover {
-      background: #333;
-      color: #fff;
-      border-color: #333;
-    }
-
-    .cart-drawer-item__quantity input {
-      width: 40px;
-      text-align: center;
-      border: 1px solid #ddd;
-      padding: 4px;
-      border-radius: 4px;
-      font-size: 14px;
-      background: #fff;
-    }
-
-    .cart-drawer-item__quantity input:focus {
-      outline: none;
-      border-color: #333;
-    }
-
-<<<<<<< HEAD
-    /* NEW STYLES FOR PRODUCT PAGE QUANTITY AND SIZE SELECTION */
-
-    /* Size Selection Styling */
-    .swatch-size {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .swatch-size .swatch-item {
-      margin-bottom: 5px;
-    }
-
-    .swatch-size .size-label {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 45px;
-      height: 45px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      background-color: #fff;
-    }
-
-    .swatch-size input[type="radio"]:checked+.size-label {
-      background-color: #000;
-      color: #fff;
-      border-color: #000;
-      transform: scale(1.05);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .swatch-size .size-label:hover {
-      border-color: #000;
-      transform: translateY(-2px);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Quantity Control Styling */
-    .product-single__addtocart {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .product-single__addtocart .qty-control {
-      position: relative;
-      width: 120px;
-      height: 45px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      background: #fff;
-      overflow: hidden;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    }
-
-    .product-single__addtocart .qty-control__number {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 40px;
-      height: 100%;
-      border: none;
-      background: transparent;
-      text-align: center;
-      font-size: 16px;
-      font-weight: 500;
-      padding: 0;
-      margin: 0;
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
-
-    /* Hide spinner buttons */
-    .product-single__addtocart .qty-control__number::-webkit-outer-spin-button,
-    .product-single__addtocart .qty-control__number::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    .product-single__addtocart .qty-control__reduce,
-    .product-single__addtocart .qty-control__increase {
-      position: absolute;
-      top: 0;
-      width: 40px;
-      height: 100%;
-      background: #f5f5f5;
-      color: #333;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 2;
-      user-select: none;
-      transition: all 0.3s ease;
-      border: none;
-    }
-
-    .product-single__addtocart .qty-control__reduce {
-      left: 0;
-      border-right: 1px solid #ddd;
-    }
-
-    .product-single__addtocart .qty-control__increase {
-      right: 0;
-      border-left: 1px solid #ddd;
-    }
-
-    .product-single__addtocart .qty-control__reduce:hover,
-    .product-single__addtocart .qty-control__increase:hover {
-      background: #e0e0e0;
-      color: #000;
-    }
-
-    .product-single__addtocart .btn-addtocart {
-      flex: 1;
-      height: 45px;
-      font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      transition: all 0.3s ease;
-    }
-
-    .product-single__addtocart .btn-addtocart:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-=======
-    .container-ps {
+        .container-ps {
       max-width: 700px;
       margin: auto;
       background: white;
@@ -612,17 +167,8 @@
     .filter-stars-ps button.active-ps {
       background-color: #c00;
       color: #fff;
->>>>>>> 5ef059f801178e1f00b0b3d4e1f3701fa4cf1bab
     }
   </style>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!--[if lt IE 9]>
-      <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
-    <![endif]-->
-
-  <!-- Document Title -->
-  <title>Chi tiết sản phẩm</title>
 </head>
 
 <body>
@@ -689,7 +235,14 @@
     <symbol id="icon_heart" viewBox="0 0 20 20">
       <g clip-path="url(#clip0_6_54)">
         <path
-          d="M18.3932 3.30806C16.218 1.13348 12.6795 1.13348 10.5049 3.30806L9.99983 3.81285L9.49504 3.30806C7.32046 1.13319 3.78163 1.13319 1.60706 3.30806C-0.523361 5.43848 -0.537195 8.81542 1.57498 11.1634C3.50142 13.3041 9.18304 17.929 9.4241 18.1248C9.58775 18.2578 9.78467 18.3226 9.9804 18.3226C9.98688 18.3226 9.99335 18.3226 9.99953 18.3223C10.202 18.3317 10.406 18.2622 10.575 18.1248C10.816 17.929 16.4982 13.3041 18.4253 11.1631C20.5371 8.81542 20.5233 5.43848 18.3932 3.30806ZM17.1125 9.98188C15.6105 11.6505 11.4818 15.0919 9.99953 16.3131C8.51724 15.0922 4.38944 11.6511 2.88773 9.98218C1.41427 8.34448 1.40044 6.01214 2.85564 4.55693C3.59885 3.81402 4.57488 3.44227 5.5509 3.44227C6.52693 3.44227 7.50295 3.81373 8.24616 4.55693L9.3564 5.66718C9.48856 5.79934 9.65516 5.87822 9.82999 5.90589C10.1137 5.96682 10.4216 5.88764 10.6424 5.66747L11.7532 4.55693C13.2399 3.07082 15.6582 3.07111 17.144 4.55693C18.5992 6.01214 18.5854 8.34448 17.1125 9.98188Z" />
+          d="M18.3932 3.30806C16.218 1.13348 12.6795 1.13348 10.5049 3.30806L9.99983 3.81285L9.49504 3.30806C7.32046 1.13319 3.78163 1.13319 1.60706 3.30806C-0.523361 5.43848 -0.537195 8.81542 1.57498 11.1634C3.50142 13.3041 9.18304 17.929 9.4241 18.1248C9.58775 18.2578 9.78467 18.3226 9.9804 18.3226C9.98688 18.3226 9.99335 18.3226 9.99953 18.3223C10.202 18.3317 10.406 18.2622 10.575 18.1248C10.816 17.929 16.4982 13.3041 18.4253 11.1631C20.5371 8.81542 20.5233 5.43848 18.3932 3.30806ZM17.1125 9.98188C15.6105 11.6505 11.4818 15.0919 9.99953 16.3131C8.51724 15.0922 4.38944 11.6511 2.88773 9.98218C1.41427 8.34448 1.40044 6.01214 2.85564 4.55693C3.59885 3.81402 4.57488 3.44227 5.5509 3.44227C6.52693 3.44227 7.50295 3.81373 8.24616 4.55693L9.3564 5.66718C9.48856 5.79934 9.65516 5.87822 9.82999 5.90589C10.1137 5.96682 10.4216 5.88764 10.6424 5.66747L11.7532 4.55693C13.2399 3.07082 15.6582 3.07111 17.144 4.55693C18.5992 6.01214 18.5854 8.34448 17.1125 9.98188Z"
+          fill="currentColor" />
+      </g>
+      <defs>
+        <clipPath id="clip0_6_54">
+          <rect width="20" height="20" fill="white" />
+        </clipPath>
+      </defs>
     </symbol>
     <symbol id="icon_star" viewBox="0 0 9 9">
       <path
@@ -851,9 +404,9 @@
         <span class="btn-close-lg position-absolute top-0 start-0 w-100"></span>
       </a>
 
-      <div class="logo">
+      <div class="logo" style="width: 112px; height: 28px">
         <a href="index.html">
-          <img src="../images/logo.png" alt="Moon" class="logo__image d-block" />
+          <img src="../images/logo5.png" alt="Moon" class="logo__image d-block" />
         </a>
       </div>
       <!-- /.logo -->
@@ -1003,7 +556,7 @@
   <header id="header" class="header header_sticky">
     <div class="container">
       <div class="header-desk header-desk_type_1">
-        <div class="logo" style="height: 28px; width: 112px">
+        <div class="logo" style="width: 112px; height: 28px">
           <a href="index.html">
             <img src="../images/logo5.png" alt="Uomo" class="logo__image d-block" />
           </a>
@@ -1011,27 +564,29 @@
         <!-- /.logo -->
 
         <nav class="navigation">
-          <nav class="navigation">
-            <ul class="navigation__list list-unstyled d-flex">
-              <li class="navigation__item">
-                <a href="#" class="navigation__link">Trang chủ</a>
-              </li>
-              <li class="navigation__item">
-                <a href="#" class="navigation__link">Cửa hàng</a>
-              </li>
-              <li class="navigation__item">
-                <a href="#" class="navigation__link">Blog</a>
-              </li>
-              <li class="navigation__item">
-                <a href="about.html" class="navigation__link">Giới thiệu</a>
-              </li>
-              <li class="navigation__item">
-                <a href="contact.html" class="navigation__link">Liên hệ</a>
-              </li>
-            </ul>
-            <!-- /.navigation__list -->
-          </nav>
+          <ul class="navigation__list list-unstyled d-flex">
+            <li class="navigation__item">
+              <a href="index.html" class="navigation__link">Trang chủ</a>
+            </li>
+            <li class="navigation__item">
+              <a href="shop1.html" class="navigation__link">Cửa hàng</a>
+            </li>
+            <li class="navigation__item">
+              <a href="blog_list1.html" class="navigation__link">Blog</a>
+            </li>
+            <li class="navigation__item">
+              <a href="account_dashboard.html" class="navigation__link">Pages</a>
+            </li>
+            <li class="navigation__item">
+              <a href="about.html" class="navigation__link">About</a>
+            </li>
+            <li class="navigation__item">
+              <a href="contact.html" class="navigation__link">Liên hệ</a>
+            </li>
+          </ul>
+          <!-- /.navigation__list -->
         </nav>
+        <!-- /.navigation -->
 
         <div class="header-tools d-flex align-items-center">
           <div class="header-tools__item hover-container">
@@ -1116,7 +671,6 @@
             </svg>
           </a>
 
-
           <a class="header-tools__item" href="#" data-bs-toggle="modal" data-bs-target="#siteMap">
             <svg class="nav-icon" width="25" height="18" viewBox="0 0 25 18" xmlns="http://www.w3.org/2000/svg">
               <use href="#icon_nav" />
@@ -1132,626 +686,234 @@
   <!-- End Header Type 1 -->
 
   <main>
-    <div class="mb-md-1 pb-md-3"></div>
-    <section class="product-single container">
-      <div class="row">
-        <div class="col-lg-7">
-          <div class="product-single__media" data-media-type="vertical-thumbnail">
-            <div class="product-single__image">
-              <div class="swiper-container">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide product-single__image-item">
-                    <img loading="lazy" class="h-auto" src="../images/products/product_0.jpg" width="674" height="674"
-                      alt="" />
-                    <a data-fancybox="gallery" href="../images/products/product_0.jpg" data-bs-toggle="tooltip"
-                      data-bs-placement="left" title="Zoom">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <use href="#icon_zoom" />
-                      </svg>
+    <div class="mb-4 pb-4"></div>
+    <section class="shop-checkout container">
+      <h2 class="page-title">Cart</h2>
+      <div class="checkout-steps">
+        <a href="shop_cart.html" class="checkout-steps__item active">
+          <span class="checkout-steps__item-number">01</span>
+          <span class="checkout-steps__item-title">
+            <span>Shopping Bag</span>
+            <em>Manage Your Items List</em>
+          </span>
+        </a>
+        <a href="shop_checkout.html" class="checkout-steps__item">
+          <span class="checkout-steps__item-number">02</span>
+          <span class="checkout-steps__item-title">
+            <span>Shipping and Checkout</span>
+            <em>Checkout Your Items List</em>
+          </span>
+        </a>
+        <a href="shop_order_complete.html" class="checkout-steps__item">
+          <span class="checkout-steps__item-number">03</span>
+          <span class="checkout-steps__item-title">
+            <span>Confirmation</span>
+            <em>Review And Submit Your Order</em>
+          </span>
+        </a>
+      </div>
+      <div class="shopping-cart">
+        <div class="cart-table__wrapper">
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th></th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="shopping-cart__product-item">
+                    <a href="product1_simple.html">
+                      <img loading="lazy" src="../images/cart-item-1.jpg" width="120" height="120" alt="" />
                     </a>
                   </div>
-                  <div class="swiper-slide product-single__image-item">
-                    <img loading="lazy" class="h-auto" src="../images/products/product_0-1.jpg" width="674" height="674"
-                      alt="" />
-                    <a data-fancybox="gallery" href="../images/products/product_0-1.jpg" data-bs-toggle="tooltip"
-                      data-bs-placement="left" title="Zoom">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <use href="#icon_zoom" />
-                      </svg>
+                </td>
+                <td>
+                  <div class="shopping-cart__product-item__detail">
+                    <h4><a href="product1_simple.html">Zessi Dresses</a></h4>
+                    <ul class="shopping-cart__product-item__options">
+                      <li>Color: Yellow</li>
+                      <li>Size: L</li>
+                    </ul>
+                  </div>
+                </td>
+                <td>
+                  <span class="shopping-cart__product-price">$99</span>
+                </td>
+                <td>
+                  <div class="qty-control position-relative">
+                    <input type="number" name="quantity" value="3" min="1" class="qty-control__number text-center" />
+                    <div class="qty-control__reduce">-</div>
+                    <div class="qty-control__increase">+</div>
+                  </div>
+                  <!-- .qty-control -->
+                </td>
+                <td>
+                  <span class="shopping-cart__subtotal">$297</span>
+                </td>
+                <td>
+                  <a href="#" class="remove-cart">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="#767676" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M0.259435 8.85506L9.11449 0L10 0.885506L1.14494 9.74056L0.259435 8.85506Z" />
+                      <path d="M0.885506 0.0889838L9.74057 8.94404L8.85506 9.82955L0 0.97449L0.885506 0.0889838Z" />
+                    </svg>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="shopping-cart__product-item">
+                    <a href="product1_simple.html">
+                      <img loading="lazy" src="../images/cart-item-2.jpg" width="120" height="120" alt="" />
                     </a>
                   </div>
-                  <div class="swiper-slide product-single__image-item">
-                    <img loading="lazy" class="h-auto" src="../images/products/product_0-2.jpg" width="674" height="674"
-                      alt="" />
-                    <a data-fancybox="gallery" href="../images/products/product_0-2.jpg" data-bs-toggle="tooltip"
-                      data-bs-placement="left" title="Zoom">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <use href="#icon_zoom" />
-                      </svg>
+                </td>
+                <td>
+                  <div class="shopping-cart__product-item__detail">
+                    <h4><a href="product1_simple.html">Kirby T-Shirt</a></h4>
+                    <ul class="shopping-cart__product-item__options">
+                      <li>Color: Yellow</li>
+                      <li>Size: L</li>
+                    </ul>
+                  </div>
+                </td>
+                <td>
+                  <span class="shopping-cart__product-price">$99</span>
+                </td>
+                <td>
+                  <div class="qty-control position-relative">
+                    <input type="number" name="quantity" value="3" min="1" class="qty-control__number text-center" />
+                    <div class="qty-control__reduce">-</div>
+                    <div class="qty-control__increase">+</div>
+                  </div>
+                  <!-- .qty-control -->
+                </td>
+                <td>
+                  <span class="shopping-cart__subtotal">$297</span>
+                </td>
+                <td>
+                  <a href="#" class="remove-cart">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="#767676" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M0.259435 8.85506L9.11449 0L10 0.885506L1.14494 9.74056L0.259435 8.85506Z" />
+                      <path d="M0.885506 0.0889838L9.74057 8.94404L8.85506 9.82955L0 0.97449L0.885506 0.0889838Z" />
+                    </svg>
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="shopping-cart__product-item">
+                    <a href="product1_simple.html">
+                      <img loading="lazy" src="../images/cart-item-3.jpg" width="120" height="120" alt="" />
                     </a>
                   </div>
-                  <div class="swiper-slide product-single__image-item">
-                    <img loading="lazy" class="h-auto" src="../images/products/product_0-3.jpg" width="674" height="674"
-                      alt="" />
-                    <a data-fancybox="gallery" href="../images/products/product_0-3.jpg" data-bs-toggle="tooltip"
-                      data-bs-placement="left" title="Zoom">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <use href="#icon_zoom" />
-                      </svg>
-                    </a>
+                </td>
+                <td>
+                  <div class="shopping-cart__product-item__detail">
+                    <h4>
+                      <a href="product1_simple.html">Cobleknit Shawl</a>
+                    </h4>
+                    <ul class="shopping-cart__product-item__options">
+                      <li>Color: Yellow</li>
+                      <li>Size: L</li>
+                    </ul>
                   </div>
-                </div>
-                <div class="swiper-button-prev">
-                  <svg width="7" height="11" viewBox="0 0 7 11" xmlns="http://www.w3.org/2000/svg">
-                    <use href="#icon_prev_sm" />
-                  </svg>
-                </div>
-                <div class="swiper-button-next">
-                  <svg width="7" height="11" viewBox="0 0 7 11" xmlns="http://www.w3.org/2000/svg">
-                    <use href="#icon_next_sm" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div class="product-single__thumbnail">
-              <div class="swiper-container">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide product-single__image-item">
-                    <img loading="lazy" class="h-auto" src="../images/products/product_0.jpg" width="104" height="104"
-                      alt="" />
+                </td>
+                <td>
+                  <span class="shopping-cart__product-price">$99</span>
+                </td>
+                <td>
+                  <div class="qty-control position-relative">
+                    <input type="number" name="quantity" value="3" min="1" class="qty-control__number text-center" />
+                    <div class="qty-control__reduce">-</div>
+                    <div class="qty-control__increase">+</div>
                   </div>
-                  <div class="swiper-slide product-single__image-item">
-                    <img loading="lazy" class="h-auto" src="../images/products/product_0-1.jpg" width="104" height="104"
-                      alt="" />
-                  </div>
-                  <div class="swiper-slide product-single__image-item">
-                    <img loading="lazy" class="h-auto" src="../images/products/product_0-2.jpg" width="104" height="104"
-                      alt="" />
-                  </div>
-                  <div class="swiper-slide product-single__image-item">
-                    <img loading="lazy" class="h-auto" src="../images/products/product_0-3.jpg" width="104" height="104"
-                      alt="" />
-                  </div>
-                </div>
-              </div>
-            </div>
+                  <!-- .qty-control -->
+                </td>
+                <td>
+                  <span class="shopping-cart__subtotal">$297</span>
+                </td>
+                <td>
+                  <a href="#" class="remove-cart">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="#767676" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M0.259435 8.85506L9.11449 0L10 0.885506L1.14494 9.74056L0.259435 8.85506Z" />
+                      <path d="M0.885506 0.0889838L9.74057 8.94404L8.85506 9.82955L0 0.97449L0.885506 0.0889838Z" />
+                    </svg>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="cart-table-footer">
+            <form action="https://uomo-html.flexkitux.com/Demo1/" class="position-relative bg-body">
+              <input class="form-control" type="text" name="coupon_code" placeholder="Coupon Code" />
+              <input class="btn-link fw-medium position-absolute top-0 end-0 h-100 px-4" type="submit"
+                value="APPLY COUPON" />
+            </form>
+            <button class="btn btn-light">UPDATE CART</button>
           </div>
         </div>
-
-        <div class="col-lg-5">
-          <div class="d-flex justify-content-between mb-4 pb-md-2">
-            <div class="breadcrumb mb-0 d-none d-md-block flex-grow-1">
-              <a href="#" class="menu-link menu-link_us-s text-uppercase fw-medium">Home</a>
-              <span class="breadcrumb-separator menu-link fw-medium ps-1 pe-1">/</span>
-              <a href="#" class="menu-link menu-link_us-s text-uppercase fw-medium">The Shop</a>
+        <div class="shopping-cart__totals-wrapper">
+          <div class="sticky-content">
+            <div class="shopping-cart__totals">
+              <h3>Cart Totals</h3>
+              <table class="cart-totals">
+                <tbody>
+                  <tr>
+                    <th>Subtotal</th>
+                    <td>$1300</td>
+                  </tr>
+                  <tr>
+                    <th>Shipping</th>
+                    <td>
+                      <div class="form-check">
+                        <input class="form-check-input form-check-input_fill" type="checkbox" value=""
+                          id="free_shipping" />
+                        <label class="form-check-label" for="free_shipping">Free shipping</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input form-check-input_fill" type="checkbox" value="" id="flat_rate" />
+                        <label class="form-check-label" for="flat_rate">Flat rate: $49</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input form-check-input_fill" type="checkbox" value=""
+                          id="local_pickup" />
+                        <label class="form-check-label" for="local_pickup">Local pickup: $8</label>
+                      </div>
+                      <div>Shipping to AL.</div>
+                      <div>
+                        <a href="#" class="menu-link menu-link_us-s">CHANGE ADDRESS</a>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>VAT</th>
+                    <td>$19</td>
+                  </tr>
+                  <tr>
+                    <th>Total</th>
+                    <td>$1319</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <!-- /.breadcrumb -->
-
-            <div
-              class="product-single__prev-next d-flex align-items-center justify-content-between justify-content-md-end flex-grow-1">
-              <a href="#" class="text-uppercase fw-medium disabled"><svg class="mb-1px" width="10" height="10"
-                  viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-                  <use href="#icon_prev_md" />
-                </svg><span class="menu-link menu-link_us-s">Prev</span></a>
-              <a href="product2_variable.html" class="text-uppercase fw-medium"><span
-                  class="menu-link menu-link_us-s">Next</span><svg class="mb-1px" width="10" height="10"
-                  viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-                  <use href="#icon_next_md" />
-                </svg></a>
-            </div>
-            <!-- /.shop-acs -->
-          </div>
-          <h1 class="product-single__name">
-            Áo Hoodie Nam ICONDENIM ft MARVEL Deadpool
-          </h1>
-          <div class="product-single__rating">
-            <div class="reviews-group d-flex">
-              <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                <use href="#icon_star" />
-              </svg>
-              <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                <use href="#icon_star" />
-              </svg>
-              <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                <use href="#icon_star" />
-              </svg>
-              <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                <use href="#icon_star" />
-              </svg>
-              <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                <use href="#icon_star" />
-              </svg>
-            </div>
-            <span class="reviews-note text-lowercase text-secondary ms-1">8k+ reviews</span>
-          </div>
-          <div class="product-single__price">
-            <span class="current-price">399.000đ</span>
-          </div>
-          <div class="product-single__short-desc">
-            <p>
-              Áo hoodie nổi bật với hình in logo Deadpool được cách điệu sáng
-              tạo, kèm câu quote hài hước phía sau, thể hiện rõ tinh thần siêu
-              quậy đặc trưng của bộ sưu tập. Chất liệu cotton cao cấp, đạt
-              chuẩn ILS, mang lại cảm giác thoải mái, thoáng mát và an toàn
-              cho người mặc. Thiết kế form regular rộng rãi vừa phải, dễ mặc,
-              che khuyết điểm tốt và phù hợp với nhiều dáng người.
-            </p>
-          </div>
-          <form name="addtocart-form" method="post">
-            <!-- Color Selection -->
-            <div class="product-form__item mb-4">
-              <label class="form-label">Màu sắc:</label>
-              <div class="color-options">
-                <label class="color-option">
-                  <input type="radio" name="color" value="Đen" checked />
-                  <span class="color-circle" style="background-color: #000000"></span>
-                </label>
-                <label class="color-option">
-                  <input type="radio" name="color" value="Đỏ" />
-                  <span class="color-circle" style="background-color: #ff0000"></span>
-                </label>
-                <label class="color-option">
-                  <input type="radio" name="color" value="Xám" />
-                  <span class="color-circle" style="background-color: #808080"></span>
-                </label>
+            <div class="mobile_fixed-btn_wrapper">
+              <div class="button-wrapper container">
+                <button class="btn btn-primary btn-checkout">
+                  PROCEED TO CHECKOUT
+                </button>
               </div>
-            </div>
-
-            <!-- Size Selection -->
-            <div class="product-form__item mb-4">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <label class="form-label">Kích thước:</label>
-                <a href="#" class="text-decoration-underline" data-bs-toggle="modal" data-bs-target="#sizeGuide">Hướng
-                  dẫn chọn size</a>
-              </div>
-              <div class="swatch-size d-flex flex-wrap gap-2">
-                <div class="swatch-item">
-                  <input type="radio" name="size" id="size-xs" value="XS" class="d-none" />
-                  <label for="size-xs" class="swatch-label size-label">XS</label>
-                </div>
-                <div class="swatch-item">
-                  <input type="radio" name="size" id="size-s" value="S" class="d-none" />
-                  <label for="size-s" class="swatch-label size-label">S</label>
-                </div>
-                <div class="swatch-item">
-                  <input type="radio" name="size" id="size-m" value="M" class="d-none" checked />
-                  <label for="size-m" class="swatch-label size-label">M</label>
-                </div>
-                <div class="swatch-item">
-                  <input type="radio" name="size" id="size-l" value="L" class="d-none" />
-                  <label for="size-l" class="swatch-label size-label">L</label>
-                </div>
-                <div class="swatch-item">
-                  <input type="radio" name="size" id="size-xl" value="XL" class="d-none" />
-                  <label for="size-xl" class="swatch-label size-label">XL</label>
-                </div>
-              </div>
-            </div>
-
-            <div class="product-single__addtocart">
-              <div class="qty-control position-relative">
-                <input type="number" name="quantity" value="1" min="1" class="qty-control__number text-center"
-                  data-initialized="false" />
-                <div class="qty-control__reduce">-</div>
-                <div class="qty-control__increase">+</div>
-              </div>
-              <!-- .qty-control -->
-              <button type="submit" class="btn btn-primary btn-addtocart js-open-aside add-to-cart"
-                data-aside="cartDrawer" data-product-id="1"
-                data-product-name="Áo Hoodie Nam ICONDENIM ft MARVEL Deadpool" data-product-price="399000"
-                data-product-image="../images/products/product_0.jpg">
-                Thêm vào giỏ hàng
-              </button>
-            </div>
-          </form>
-          <div class="product-single__addtolinks">
-            <a href="#" class="menu-link menu-link_us-s add-to-wishlist"><svg width="16" height="16" viewBox="0 0 20 20"
-                fill="none" xmlns="http://www.w3.org/2000/svg">
-                <use href="#icon_heart" />
-              </svg><span>Thêm vào danh sách yêu thích</span></a>
-            <share-button class="share-button">
-              <button class="menu-link menu-link_us-s to-share border-0 bg-transparent d-flex align-items-center">
-                <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <use href="#icon_sharing" />
-                </svg>
-                <span>Chia sẻ</span>
-              </button>
-              <details id="Details-share-template__main" class="m-1 xl:m-1.5" hidden="">
-                <summary class="btn-solid m-1 xl:m-1.5 pt-3.5 pb-3 px-5">
-                  +
-                </summary>
-                <div id="Article-share-template__main"
-                  class="share-button__fallback flex items-center absolute top-full left-0 w-full px-2 py-4 bg-container shadow-theme border-t z-10">
-                  <div class="field grow mr-4">
-                    <label class="field__label sr-only" for="url">Link</label>
-                    <input type="text" class="field__input w-full" id="url"
-                      value="https://uomo-crystal.myshopify.com/blogs/news/go-to-wellness-tips-for-mental-health"
-                      placeholder="Link" onclick="this.select();" readonly="" />
-                  </div>
-                  <button class="share-button__copy no-js-hidden">
-                    <svg class="icon icon-clipboard inline-block mr-1" width="11" height="13" fill="none"
-                      xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 11 13">
-                      <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M2 1a1 1 0 011-1h7a1 1 0 011 1v9a1 1 0 01-1 1V1H2zM1 2a1 1 0 00-1 1v9a1 1 0 001 1h7a1 1 0 001-1V3a1 1 0 00-1-1H1zm0 10V3h7v9H1z"
-                        fill="currentColor"></path>
-                    </svg>
-                    <span class="sr-only">Copy link</span>
-                  </button>
-                </div>
-              </details>
-            </share-button>
-            <script src="js/details-disclosure.js" defer="defer"></script>
-            <script src="js/share.js" defer="defer"></script>
-          </div>
-          <div class="product-single__meta-info">
-            <div class="meta-item">
-              <label>SKU:</label>
-              <span>N/A</span>
-            </div>
-            <div class="meta-item">
-              <label>Categories:</label>
-              <span>Casual & Urban Wear, Jackets, Men</span>
-            </div>
-            <div class="meta-item">
-              <label>Tags:</label>
-              <span>biker, black, bomber, leather</span>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <section class="products-carousel container" style="margin-top: 100px">
-      <h2 class="h3 text-uppercase mb-4 pb-xl-2 mb-xl-4 text-center">
-        Các sản phẩm liên quan
-      </h2>
-
-      <div id="related_products" class="position-relative">
-        <div class="swiper-container js-swiper-slider" data-settings='{
-            "autoplay": false,
-            "slidesPerView": 4,
-            "slidesPerGroup": 4,
-            "effect": "none",
-            "loop": true,
-            "pagination": {
-              "el": "#related_products .products-pagination",
-              "type": "bullets",
-              "clickable": true
-            },
-            "navigation": {
-              "nextEl": "#related_products .products-carousel__next",
-              "prevEl": "#related_products .products-carousel__prev"
-            },
-            "breakpoints": {
-              "320": {
-                "slidesPerView": 2,
-                "slidesPerGroup": 2,
-                "spaceBetween": 14
-              },
-              "768": {
-                "slidesPerView": 3,
-                "slidesPerGroup": 3,
-                "spaceBetween": 24
-              },
-              "992": {
-                "slidesPerView": 4,
-                "slidesPerGroup": 4,
-                "spaceBetween": 30
-              }
-            }
-          }'>
-          <div class="swiper-wrapper">
-            <div class="swiper-slide product-card">
-              <div class="pc__img-wrapper">
-                <a href="product1_simple.html">
-                  <img loading="lazy" src="../images/products/product_3.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img" />
-                  <img loading="lazy" src="../images/products/product_3-1.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img pc__img-second" />
-                </a>
-                <button
-                  class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside add-to-cart"
-                  data-aside="cartDrawer" data-product-id="3" data-product-name="Kirby T-Shirt"
-                  data-product-price="17000" data-product-image="../images/products/product_3.jpg" title="Add To Cart">
-                  Add To Cart
-                </button>
-              </div>
-
-              <div class="pc__info position-relative">
-                <p class="pc__category">Dresses</p>
-                <h6 class="pc__title">
-                  <a href="product1_simple.html">Kirby T-Shirt</a>
-                </h6>
-                <div class="product-card__price d-flex">
-                  <span class="money price">$17</span>
-                </div>
-
-                <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                  title="Add To Wishlist">
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <use href="#icon_heart" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="swiper-slide product-card">
-              <div class="pc__img-wrapper">
-                <a href="product1_simple.html">
-                  <img loading="lazy" src="../images/products/product_1.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img" />
-                  <img loading="lazy" src="../images/products/product_1-1.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img pc__img-second" />
-                </a>
-                <button
-                  class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside"
-                  data-aside="cartDrawer" title="Add To Cart">
-                  Add To Cart
-                </button>
-              </div>
-
-              <div class="pc__info position-relative">
-                <p class="pc__category">Dresses</p>
-                <h6 class="pc__title">
-                  <a href="product1_simple.html">Cropped Faux Leather Jacket</a>
-                </h6>
-                <div class="product-card__price d-flex">
-                  <span class="money price">$29</span>
-                </div>
-                <div class="product-card__review d-flex align-items-center">
-                  <div class="reviews-group d-flex">
-                    <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                      <use href="#icon_star" />
-                    </svg>
-                    <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                      <use href="#icon_star" />
-                    </svg>
-                    <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                      <use href="#icon_star" />
-                    </svg>
-                    <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                      <use href="#icon_star" />
-                    </svg>
-                    <svg class="review-star" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-                      <use href="#icon_star" />
-                    </svg>
-                  </div>
-                  <span class="reviews-note text-lowercase text-secondary ms-1">8k+ reviews</span>
-                </div>
-
-                <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                  title="Add To Wishlist">
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <use href="#icon_heart" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="swiper-slide product-card">
-              <div class="pc__img-wrapper">
-                <a href="product1_simple.html">
-                  <img loading="lazy" src="../images/products/product_2.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img" />
-                  <img loading="lazy" src="../images/products/product_2-1.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img pc__img-second" />
-                </a>
-                <button
-                  class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside"
-                  data-aside="cartDrawer" title="Add To Cart">
-                  Add To Cart
-                </button>
-              </div>
-
-              <div class="pc__info position-relative">
-                <p class="pc__category">Dresses</p>
-                <h6 class="pc__title">
-                  <a href="product1_simple.html">Calvin Shorts</a>
-                </h6>
-                <div class="product-card__price d-flex">
-                  <span class="money price">$62</span>
-                </div>
-
-                <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                  title="Add To Wishlist">
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <use href="#icon_heart" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="swiper-slide product-card">
-              <div class="pc__img-wrapper">
-                <a href="product1_simple.html">
-                  <img loading="lazy" src="../images/products/product_6.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img" />
-                  <img loading="lazy" src="../images/products/product_6-1.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img pc__img-second" />
-                </a>
-                <button
-                  class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside"
-                  data-aside="cartDrawer" title="Add To Cart">
-                  Add To Cart
-                </button>
-              </div>
-
-              <div class="pc__info position-relative">
-                <p class="pc__category">Dresses</p>
-                <h6 class="pc__title">
-                  <a href="product1_simple.html">Shirt In Botanical Cheetah Print</a>
-                </h6>
-                <div class="product-card__price d-flex">
-                  <span class="money price">$62</span>
-                </div>
-
-                <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                  title="Add To Wishlist">
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <use href="#icon_heart" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="swiper-slide product-card">
-              <div class="pc__img-wrapper">
-                <a href="product1_simple.html">
-                  <img loading="lazy" src="../images/products/product_7.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img" />
-                  <img loading="lazy" src="../images/products/product_7-1.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img pc__img-second" />
-                </a>
-                <button
-                  class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside"
-                  data-aside="cartDrawer" title="Add To Cart">
-                  Add To Cart
-                </button>
-              </div>
-
-              <div class="pc__info position-relative">
-                <p class="pc__category">Dresses</p>
-                <h6 class="pc__title">
-                  <a href="product1_simple.html">Cotton Jersey T-Shirt</a>
-                </h6>
-                <div class="product-card__price d-flex">
-                  <span class="money price">$17</span>
-                </div>
-
-                <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                  title="Add To Wishlist">
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <use href="#icon_heart" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="swiper-slide product-card">
-              <div class="pc__img-wrapper">
-                <a href="product1_simple.html">
-                  <img loading="lazy" src="../images/products/product_4.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img" />
-                  <img loading="lazy" src="../images/products/product_4-1.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img pc__img-second" />
-                </a>
-                <button
-                  class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside"
-                  data-aside="cartDrawer" title="Add To Cart">
-                  Add To Cart
-                </button>
-              </div>
-
-              <div class="pc__info position-relative">
-                <p class="pc__category">Dresses</p>
-                <h6 class="pc__title">
-                  <a href="product1_simple.html">Cableknit Shawl</a>
-                </h6>
-                <div class="product-card__price d-flex">
-                  <span class="money price price-old">$129</span>
-                  <span class="money price price-sale">$99</span>
-                </div>
-
-                <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                  title="Add To Wishlist">
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <use href="#icon_heart" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="swiper-slide product-card">
-              <div class="pc__img-wrapper">
-                <a href="product1_simple.html">
-                  <img loading="lazy" src="../images/products/product_5.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img" />
-                  <img loading="lazy" src="../images/products/product_5-1.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img pc__img-second" />
-                </a>
-                <button
-                  class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside add-to-cart"
-                  data-aside="cartDrawer" data-product-id="5" data-product-name="Colorful Jacket"
-                  data-product-price="29000" data-product-image="../images/products/product_5.jpg" title="Add To Cart">
-                  Add To Cart
-                </button>
-              </div>
-
-              <div class="pc__info position-relative">
-                <p class="pc__category">Dresses</p>
-                <h6 class="pc__title">
-                  <a href="product1_simple.html">Colorful Jacket</a>
-                </h6>
-                <div class="product-card__price d-flex">
-                  <span class="money price">$29</span>
-                </div>
-
-                <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                  title="Add To Wishlist">
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <use href="#icon_heart" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="swiper-slide product-card">
-              <div class="pc__img-wrapper">
-                <a href="product1_simple.html">
-                  <img loading="lazy" src="../images/products/product_8.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img" />
-                  <img loading="lazy" src="../images/products/product_8-1.jpg" width="330" height="400"
-                    alt="Cropped Faux leather Jacket" class="pc__img pc__img-second" />
-                </a>
-                <button
-                  class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside add-to-cart"
-                  data-aside="cartDrawer" data-product-id="8" data-product-name="Zessi Dresses"
-                  data-product-price="99000" data-product-image="../images/products/product_8.jpg" title="Add To Cart">
-                  Add To Cart
-                </button>
-              </div>
-
-              <div class="pc__info position-relative">
-                <p class="pc__category">Dresses</p>
-                <h6 class="pc__title">
-                  <a href="product1_simple.html">Zessi Dresses</a>
-                </h6>
-                <div class="product-card__price d-flex">
-                  <span class="money price price-old">$129</span>
-                  <span class="money price price-sale">$99</span>
-                </div>
-
-                <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                  title="Add To Wishlist">
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <use href="#icon_heart" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- /.swiper-wrapper -->
-        </div>
-        <!-- /.swiper-container js-swiper-slider -->
-
-        <div class="products-carousel__prev position-absolute top-50 d-flex align-items-center justify-content-center">
-          <svg width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-            <use href="#icon_prev_md" />
-          </svg>
-        </div>
-        <!-- /.products-carousel__prev -->
-        <div class="products-carousel__next position-absolute top-50 d-flex align-items-center justify-content-center">
-          <svg width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-            <use href="#icon_next_md" />
-          </svg>
-        </div>
-        <!-- /.products-carousel__next -->
-
-        <div class="products-pagination mt-4 mb-5 d-flex align-items-center justify-content-center"></div>
-        <!-- /.products-pagination -->
-      </div>
-      <!-- /.position-relative -->
-    </section>
-    <!-- /.products-carousel container -->
   </main>
 
   <div class="mb-5 pb-xl-5"></div>
@@ -1917,7 +1079,7 @@
     <div class="footer-middle container">
       <div class="row row-cols-lg-5 row-cols-2">
         <div class="footer-column footer-store-info col-12 mb-4 mb-lg-0">
-          <div class="logo" style="height: 28px; width: 112px">
+          <div class="logo" style="width: 112px; height: 28px">
             <a href="index.html">
               <img src="../images/logo5.png" alt="Uomo" class="logo__image d-block" />
             </a>
@@ -1928,7 +1090,7 @@
           </p>
 
           <p class="m-0">
-            <strong class="fw-medium">sale@uomo.com</strong>
+            <strong class="fw-medium">moonsale@gmail.com</strong>
           </p>
           <p>
             <strong class="fw-medium">+1 246-345-0695</strong>
@@ -1981,88 +1143,88 @@
         <!-- /.footer-column -->
 
         <div class="footer-column footer-menu mb-4 mb-lg-0">
-          <h6 class="text-uppercase">Công ty</h6>
-          <ul class="list-unstyled">
-            <li>
-              <a href="about.html" class="menu-link_us-s">Về chúng tôi</a>
+          <h6 class="sub-menu__title text-uppercase">Company</h6>
+          <ul class="sub-menu__list list-unstyled">
+            <li class="sub-menu__item">
+              <a href="about.html" class="menu-link menu-link_us-s">About Us</a>
             </li>
-            <li>
-              <a href="about.html" class="menu-link menu-link_us-s">Tuyển dụng</a>
+            <li class="sub-menu__item">
+              <a href="about.html" class="menu-link menu-link_us-s">Careers</a>
             </li>
-            <li>
-              <a href="about.html" class="menu-link menu-link_us-s">Đối tác</a>
+            <li class="sub-menu__item">
+              <a href="about.html" class="menu-link menu-link_us-s">Affiliates</a>
             </li>
-            <li>
+            <li class="sub-menu__item">
               <a href="blog_list1.html" class="menu-link menu-link_us-s">Blog</a>
             </li>
-            <li>
-              <a href="contact.html" class="menu-link menu-link_us-s">Liên hệ</a>
+            <li class="sub-menu__item">
+              <a href="contact.html" class="menu-link menu-link_us-s">Contact Us</a>
             </li>
           </ul>
         </div>
         <!-- /.footer-column -->
 
         <div class="footer-column footer-menu mb-4 mb-lg-0">
-          <h6 class="text-uppercase">Shop</h6>
-          <ul class="list-unstyled">
-            <li>
-              <a href="shop2.html" class="menu-link_us-s">Sản phẩm mới</a>
+          <h6 class="sub-menu__title text-uppercase">Shop</h6>
+          <ul class="sub-menu__list list-unstyled">
+            <li class="sub-menu__item">
+              <a href="shop2.html" class="menu-link menu-link_us-s">New Arrivals</a>
             </li>
-            <li>
-              <a href="shop3.html" class="menu-link_us-s">Phụ kiện</a>
+            <li class="sub-menu__item">
+              <a href="shop3.html" class="menu-link menu-link_us-s">Accessories</a>
             </li>
-            <li>
-              <a href="shop4.html" class="menu-link menu-link_us-s">Nam</a>
+            <li class="sub-menu__item">
+              <a href="shop4.html" class="menu-link menu-link_us-s">Men</a>
             </li>
-            <li>
-              <a href="shop5.html" class="menu-link menu-link_us-s">Nữ</a>
+            <li class="sub-menu__item">
+              <a href="shop5.html" class="menu-link menu-link_us-s">Women</a>
             </li>
-            <li>
-              <a href="shop1.html" class="menu-link menu-link_us-s">Tất cả sản phẩm</a>
+            <li class="sub-menu__item">
+              <a href="shop1.html" class="menu-link menu-link_us-s">Shop All</a>
             </li>
           </ul>
         </div>
         <!-- /.footer-column -->
 
         <div class="footer-column footer-menu mb-4 mb-lg-0">
-          <h6 class="text-uppercase">Hỗ trợ</h6>
-          <ul class="list-unstyled">
-            <li>
-              <a href="about.html" class="menu-link menu-link_us-s">Dịch vụ khách hàng</a>
+          <h6 class="sub-menu__title text-uppercase">Help</h6>
+          <ul class="sub-menu__list list-unstyled">
+            <li class="sub-menu__item">
+              <a href="about.html" class="menu-link menu-link_us-s">Customer Service</a>
             </li>
-            <li>
-              <a href="account_dashboard.html" class="menu-link menu-link_us-s">Tài khoản của tôi</a>
+            <li class="sub-menu__item">
+              <a href="account_dashboard.html" class="menu-link menu-link_us-s">My Account</a>
             </li>
-            <li>
-              <a href="store_location.html" class="menu-link menu-link_us-s">Tìm cửa hàng</a>
+            <li class="sub-menu__item">
+              <a href="store_location.html" class="menu-link menu-link_us-s">Find a Store</a>
             </li>
-            <li>
-              <a href="about.html" class="menu-link menu-link_us-s">Pháp luật & Quyền riêng tư</a>
+            <li class="sub-menu__item">
+              <a href="about.html" class="menu-link menu-link_us-s">Legal & Privacy</a>
             </li>
-            <li>
-              <a href="contact.html" class="menu-link menu-link_us-s">Liên hệ</a>
+            <li class="sub-menu__item">
+              <a href="contact.html" class="menu-link menu-link_us-s">Contact</a>
             </li>
-            <li>
-              <a href="about.html" class="menu-link menu-link_us-s">Thẻ quà tặng</a>
+            <li class="sub-menu__item">
+              <a href="about.html" class="menu-link menu-link_us-s">Gift Card</a>
             </li>
           </ul>
         </div>
         <!-- /.footer-column -->
 
         <div class="footer-column footer-newsletter col-12 mb-4 mb-lg-0">
-          <h6 class="text-uppercase">Đăng ký</h6>
+          <h6 class="sub-menu__title text-uppercase">Subscribe</h6>
           <p>
-            Đăng ký để nhận thông tin mới nhất về xu hướng, khuyến mãi và
-            nhiều hơn nữa!
+            Be the first to get the latest news about trends, promotions, and
+            much more!
           </p>
-          <form class="footer-newsletter__form position-relative bg-body">
-            <input class="form-control border-white" type="email" name="email" placeholder="Địa chỉ email của bạn" />
-            <input class="btn-link fw-medium bg-white position-absolute top-0 end-0 h-100" type="submit"
-              value="ĐĂNG KÝ" />
+          <form action="https://uomo-html.flexkitux.com/Demo1/index.html"
+            class="footer-newsletter__form position-relative bg-body">
+            <input class="form-control border-white" type="email" name="email" placeholder="Your email address" />
+            <input class="btn-link fw-medium bg-white position-absolute top-0 end-0 h-100" type="submit" value="JOIN" />
           </form>
 
           <div class="mt-4 pt-3">
-            <strong class="fw-medium">Thanh toán an toàn</strong>
+            <strong class="fw-medium">Secure payments</strong>
             <p class="mt-2">
               <img loading="lazy" src="../images/payment-options.png" alt="Acceptable payment gateways" />
             </p>
@@ -2073,7 +1235,45 @@
       <!-- /.row-cols-5 -->
     </div>
     <!-- /.footer-middle container -->
+
+    <div class="footer-bottom container">
+      <div class="d-block d-md-flex align-items-center">
+        <span class="footer-copyright me-auto">©2024 Moon</span>
+        <div class="footer-settings d-block d-md-flex align-items-center">
+          <div class="d-flex align-items-center">
+            <label for="footerSettingsLanguage" class="me-2 text-secondary">Language</label>
+            <select id="footerSettingsLanguage" class="form-select form-select-sm bg-transparent"
+              aria-label="Default select example" name="store-language">
+              <option class="footer-select__option" selected>
+                United Kingdom | English
+              </option>
+              <option class="footer-select__option" value="1">
+                United States | English
+              </option>
+              <option class="footer-select__option" value="2">German</option>
+              <option class="footer-select__option" value="3">French</option>
+              <option class="footer-select__option" value="4">Swedish</option>
+            </select>
+          </div>
+
+          <div class="d-flex align-items-center">
+            <label for="footerSettingsCurrency" class="ms-md-3 me-2 text-secondary">Currency</label>
+            <select id="footerSettingsCurrency" class="form-select form-select-sm bg-transparent"
+              aria-label="Default select example" name="store-language">
+              <option selected>$ USD</option>
+              <option value="1">£ GBP</option>
+              <option value="2">€ EURO</option>
+            </select>
+          </div>
+        </div>
+        <!-- /.footer-settings -->
+      </div>
+      <!-- /.d-flex -->
+    </div>
+    <!-- /.footer-bottom container -->
   </footer>
+  <!-- /.footer footer_type_1 -->
+  <!-- End Footer Type 1 -->
 
   <!-- Mobile Fixed Footer -->
   <footer class="footer-mobile container w-100 px-5 d-md-none bg-body">
@@ -2117,266 +1317,6 @@
     <!-- /.row -->
   </footer>
   <!-- /.footer-mobile container position-fixed d-md-none bottom-0 -->
-
-  <!-- Filters Drawer -->
-  <div class="aside-filters aside aside_right" id="shopFilter">
-    <div class="aside-header d-flex align-items-center">
-      <h3 class="text-uppercase fs-6 mb-0">Filter By</h3>
-      <button class="btn-close-lg js-close-aside btn-close-aside ms-auto"></button>
-    </div>
-    <!-- /.aside-header -->
-
-    <div class="aside-content">
-      <div class="accordion" id="categories-list">
-        <div class="accordion-item mb-4">
-          <h5 class="accordion-header" id="accordion-heading-1">
-            <button class="accordion-button p-0 border-0 fs-5 text-uppercase" type="button" data-bs-toggle="collapse"
-              data-bs-target="#accordion-filter-1" aria-expanded="true" aria-controls="accordion-filter-1">
-              Product Categories
-              <svg class="accordion-button__icon" viewBox="0 0 14 14">
-                <g aria-hidden="true" stroke="none" fill-rule="evenodd">
-                  <path class="svg-path-vertical" d="M14,6 L14,8 L0,8 L0,6 L14,6"></path>
-                  <path class="svg-path-horizontal" d="M14,6 L14,8 L0,8 L0,6 L14,6"></path>
-                </g>
-              </svg>
-            </button>
-          </h5>
-          <div id="accordion-filter-1" class="accordion-collapse collapse show border-0"
-            aria-labelledby="accordion-heading-1" data-bs-parent="#categories-list">
-            <div class="accordion-body px-0 pb-0">
-              <ul class="list list-inline row row-cols-2 mb-0">
-                <li class="list-item">
-                  <a href="#" class="menu-link py-1">Dresses</a>
-                </li>
-                <li class="list-item">
-                  <a href="#" class="menu-link py-1">Shorts</a>
-                </li>
-                <li class="list-item">
-                  <a href="#" class="menu-link py-1">Sweatshirts</a>
-                </li>
-                <li class="list-item">
-                  <a href="#" class="menu-link py-1">Swimwear</a>
-                </li>
-                <li class="list-item">
-                  <a href="#" class="menu-link py-1">Jackets</a>
-                </li>
-                <li class="list-item">
-                  <a href="#" class="menu-link py-1">T-Shirts & Tops</a>
-                </li>
-                <li class="list-item">
-                  <a href="#" class="menu-link py-1">Jeans</a>
-                </li>
-                <li class="list-item">
-                  <a href="#" class="menu-link py-1">Trousers</a>
-                </li>
-                <li class="list-item">
-                  <a href="#" class="menu-link py-1">Men</a>
-                </li>
-                <li class="list-item">
-                  <a href="#" class="menu-link py-1">Jumpers & Cardigans</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <!-- /.accordion-item -->
-      </div>
-      <!-- /.accordion-item -->
-
-      <div class="accordion" id="color-filters">
-        <div class="accordion-item mb-4">
-          <h5 class="accordion-header" id="accordion-heading-11">
-            <button class="accordion-button p-0 border-0 fs-5 text-uppercase" type="button" data-bs-toggle="collapse"
-              data-bs-target="#accordion-filter-2" aria-expanded="true" aria-controls="accordion-filter-2">
-              Color
-              <svg class="accordion-button__icon" viewBox="0 0 14 14">
-                <g aria-hidden="true" stroke="none" fill-rule="evenodd">
-                  <path class="svg-path-vertical" d="M14,6 L14,8 L0,8 L0,6 L14,6"></path>
-                  <path class="svg-path-horizontal" d="M14,6 L14,8 L0,8 L0,6 L14,6"></path>
-                </g>
-              </svg>
-            </button>
-          </h5>
-          <div id="accordion-filter-2" class="accordion-collapse collapse show border-0"
-            aria-labelledby="accordion-heading-11" data-bs-parent="#color-filters">
-            <div class="accordion-body px-0 pb-0">
-              <div class="d-flex flex-wrap">
-                <a href="#" class="swatch-color js-filter" style="color: #0a2472"></a>
-                <a href="#" class="swatch-color js-filter" style="color: #d7bb4f"></a>
-                <a href="#" class="swatch-color js-filter" style="color: #282828"></a>
-                <a href="#" class="swatch-color js-filter" style="color: #b1d6e8"></a>
-                <a href="#" class="swatch-color js-filter" style="color: #9c7539"></a>
-                <a href="#" class="swatch-color js-filter" style="color: #d29b48"></a>
-                <a href="#" class="swatch-color js-filter" style="color: #e6ae95"></a>
-                <a href="#" class="swatch-color js-filter" style="color: #d76b67"></a>
-                <a href="#" class="swatch-color swatch_active js-filter" style="color: #bababa"></a>
-                <a href="#" class="swatch-color js-filter" style="color: #bfdcc4"></a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /.accordion-item -->
-      </div>
-      <!-- /.accordion -->
-
-      <div class="accordion" id="size-filters">
-        <div class="accordion-item mb-4">
-          <h5 class="accordion-header" id="accordion-heading-size">
-            <button class="accordion-button p-0 border-0 fs-5 text-uppercase" type="button" data-bs-toggle="collapse"
-              data-bs-target="#accordion-filter-size" aria-expanded="true" aria-controls="accordion-filter-size">
-              Sizes
-              <svg class="accordion-button__icon" viewBox="0 0 14 14">
-                <g aria-hidden="true" stroke="none" fill-rule="evenodd">
-                  <path class="svg-path-vertical" d="M14,6 L14,8 L0,8 L0,6 L14,6"></path>
-                  <path class="svg-path-horizontal" d="M14,6 L14,8 L0,8 L0,6 L14,6"></path>
-                </g>
-              </svg>
-            </button>
-          </h5>
-          <div id="accordion-filter-size" class="accordion-collapse collapse show border-0"
-            aria-labelledby="accordion-heading-size" data-bs-parent="#size-filters">
-            <div class="accordion-body px-0 pb-0">
-              <div class="d-flex flex-wrap">
-                <a href="#" class="swatch-size btn btn-sm btn-outline-light mb-3 me-3 js-filter">XS</a>
-                <a href="#" class="swatch-size btn btn-sm btn-outline-light mb-3 me-3 js-filter">S</a>
-                <a href="#" class="swatch-size btn btn-sm btn-outline-light mb-3 me-3 js-filter">M</a>
-                <a href="#" class="swatch-size btn btn-sm btn-outline-light mb-3 me-3 js-filter">L</a>
-                <a href="#" class="swatch-size btn btn-sm btn-outline-light mb-3 me-3 js-filter">XL</a>
-                <a href="#" class="swatch-size btn btn-sm btn-outline-light mb-3 me-3 js-filter">XXL</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /.accordion-item -->
-      </div>
-      <!-- /.accordion -->
-
-      <div class="accordion" id="brand-filters">
-        <div class="accordion-item mb-4">
-          <h5 class="accordion-header" id="accordion-heading-brand">
-            <button class="accordion-button p-0 border-0 fs-5 text-uppercase" type="button" data-bs-toggle="collapse"
-              data-bs-target="#accordion-filter-brand" aria-expanded="true" aria-controls="accordion-filter-brand">
-              Brands
-              <svg class="accordion-button__icon" viewBox="0 0 14 14">
-                <g aria-hidden="true" stroke="none" fill-rule="evenodd">
-                  <path class="svg-path-vertical" d="M14,6 L14,8 L0,8 L0,6 L14,6"></path>
-                  <path class="svg-path-horizontal" d="M14,6 L14,8 L0,8 L0,6 L14,6"></path>
-                </g>
-              </svg>
-            </button>
-          </h5>
-          <div id="accordion-filter-brand" class="accordion-collapse collapse show border-0"
-            aria-labelledby="accordion-heading-brand" data-bs-parent="#brand-filters">
-            <div class="search-field multi-select accordion-body px-0 pb-0">
-              <select class="d-none" multiple name="total-numbers-list">
-                <option value="1">Adidas</option>
-                <option value="2">Balmain</option>
-                <option value="3">Balenciaga</option>
-                <option value="4">Burberry</option>
-                <option value="5">Kenzo</option>
-                <option value="5">Givenchy</option>
-                <option value="5">Zara</option>
-              </select>
-              <div class="search-field__input-wrapper mb-3">
-                <input type="text" name="search_text"
-                  class="search-field__input form-control form-control-sm border-light border-2" placeholder="SEARCH" />
-              </div>
-              <ul class="multi-select__list list-unstyled">
-                <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                  <span class="me-auto">Adidas</span>
-                  <span class="text-secondary">2</span>
-                </li>
-                <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                  <span class="me-auto">Balmain</span>
-                  <span class="text-secondary">7</span>
-                </li>
-                <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                  <span class="me-auto">Balenciaga</span>
-                  <span class="text-secondary">10</span>
-                </li>
-                <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                  <span class="me-auto">Burberry</span>
-                  <span class="text-secondary">39</span>
-                </li>
-                <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                  <span class="me-auto">Kenzo</span>
-                  <span class="text-secondary">95</span>
-                </li>
-                <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                  <span class="me-auto">Givenchy</span>
-                  <span class="text-secondary">1092</span>
-                </li>
-                <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                  <span class="me-auto">Zara</span>
-                  <span class="text-secondary">48</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <!-- /.accordion-item -->
-      </div>
-      <!-- /.accordion -->
-
-      <div class="accordion" id="price-filters">
-        <div class="accordion-item mb-4">
-          <h5 class="accordion-header mb-2" id="accordion-heading-price">
-            <button class="accordion-button p-0 border-0 fs-5 text-uppercase" type="button" data-bs-toggle="collapse"
-              data-bs-target="#accordion-filter-price" aria-expanded="true" aria-controls="accordion-filter-price">
-              Price
-              <svg class="accordion-button__icon" viewBox="0 0 14 14">
-                <g aria-hidden="true" stroke="none" fill-rule="evenodd">
-                  <path class="svg-path-vertical" d="M14,6 L14,8 L0,8 L0,6 L14,6"></path>
-                  <path class="svg-path-horizontal" d="M14,6 L14,8 L0,8 L0,6 L14,6"></path>
-                </g>
-              </svg>
-            </button>
-          </h5>
-          <div id="accordion-filter-price" class="accordion-collapse collapse show border-0"
-            aria-labelledby="accordion-heading-price" data-bs-parent="#price-filters">
-            <input class="price-range-slider" type="text" name="price_range" value="" data-slider-min="10"
-              data-slider-max="1000" data-slider-step="5" data-slider-value="[250,450]" data-currency="$" />
-            <div class="price-range__info d-flex align-items-center mt-2">
-              <div class="me-auto">
-                <span class="text-secondary">Min Price: </span>
-                <span class="price-range__min">$250</span>
-              </div>
-              <div>
-                <span class="text-secondary">Max Price: </span>
-                <span class="price-range__max">$450</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- /.accordion-item -->
-      </div>
-      <!-- /.accordion -->
-
-      <div class="filter-active-tags pt-2">
-        <button class="filter-tag d-inline-flex align-items-center mb-3 me-3 text-uppercase js-filter">
-          <i class="btn-close-xs d-inline-block"></i>
-          <span class="ms-2">Blues</span>
-        </button>
-        <button class="filter-tag d-inline-flex align-items-center mb-3 me-3 text-uppercase js-filter">
-          <i class="btn-close-xs d-inline-block"></i>
-          <span class="ms-2">Max Price: $493</span>
-        </button>
-        <button class="filter-tag d-inline-flex align-items-center mb-3 text-uppercase js-filter">
-          <i class="btn-close-xs d-inline-block"></i>
-          <span class="ms-2">Zara</span>
-        </button>
-
-        <div>
-          <button class="filter-tag d-flex align-items-center text-uppercase js-filter">
-            <i class="btn-close-xs d-inline-block"></i>
-            <span class="ms-2">RESET FILTER</span>
-          </button>
-        </div>
-      </div>
-    </div>
-    <!-- /.aside-content -->
-  </div>
-  <!-- /.aside-filters aside aside_right overflow-auto -->
 
   <!-- Customer Login Form -->
   <div class="aside aside_right overflow-hidden customer-forms" id="customerForms">
@@ -2487,7 +1427,7 @@
     </div>
     <!-- /.aside-header -->
 
-    <div class="aside-content cart-drawer-items-list" style="padding: 0px ;">
+    <div class="aside-content cart-drawer-items-list">
       <div class="cart-drawer-item d-flex position-relative">
         <div class="position-relative">
           <a href="product1_simple.html">
@@ -2582,15 +1522,475 @@
         <span class="cart-subtotal fw-medium">399.000đ</span>
       </div>
       <!-- /.d-flex justify-content-between -->
-      <a href="payment-history.html" class="btn btn-light mt-3 d-block">xem giỏ hàng</a>
+      <a href="shop_cart.html" class="btn btn-light mt-3 d-block">Xem giỏ hàng</a>
       <a href="shop_checkout.html" class="btn btn-primary mt-3 d-block">Thanh toán</a>
     </div>
     <!-- /.aside-content -->
   </div>
   <!-- /.aside -->
 
+  <!-- Sitemap -->
+  <div class="modal fade" id="siteMap" tabindex="-1">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="sitemap d-flex">
+        <div class="w-50 d-none d-lg-block">
+          <img loading="lazy" src="../images/nav-bg.jpg" alt="Site map" class="sitemap__bg" />
+        </div>
+        <!-- /.sitemap__bg w-50 d-none d-lg-block -->
+        <div class="sitemap__links w-50 flex-grow-1">
+          <div class="modal-content">
+            <div class="modal-header">
+              <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link active rounded-1 text-uppercase" id="pills-item-1-tab" data-bs-toggle="pill"
+                    href="#pills-item-1" role="tab" aria-controls="pills-item-1" aria-selected="true">WOMEN</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link rounded-1 text-uppercase" id="pills-item-2-tab" data-bs-toggle="pill"
+                    href="#pills-item-2" role="tab" aria-controls="pills-item-2" aria-selected="false">MEN</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link rounded-1 text-uppercase" id="pills-item-3-tab" data-bs-toggle="pill"
+                    href="#pills-item-3" role="tab" aria-controls="pills-item-3" aria-selected="false">KIDS</a>
+                </li>
+              </ul>
+              <button type="button" class="btn-close-lg" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+              <div class="tab-content col-12" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-item-1" role="tabpanel"
+                  aria-labelledby="pills-item-1-tab">
+                  <div class="row">
+                    <ul class="nav nav-tabs list-unstyled col-5 d-block" id="myTab" role="tablist">
+                      <li class="nav-item position-relative" role="presentation">
+                        <a class="nav-link nav-link_rline active" id="tab-item-1-tab" data-bs-toggle="tab"
+                          href="#tab-item-1" role="tab" aria-controls="tab-item-1" aria-selected="true"><span
+                            class="rline-content">WOMEN</span></a>
+                      </li>
+                      <li class="nav-item position-relative" role="presentation">
+                        <a class="nav-link nav-link_rline" id="tab-item-2-tab" data-bs-toggle="tab" href="#tab-item-2"
+                          role="tab" aria-controls="tab-item-2" aria-selected="false"><span
+                            class="rline-content">MAN</span></a>
+                      </li>
+                      <li class="nav-item position-relative" role="presentation">
+                        <a class="nav-link nav-link_rline" id="tab-item-3-tab" data-bs-toggle="tab" href="#tab-item-3"
+                          role="tab" aria-controls="tab-item-3" aria-selected="false"><span
+                            class="rline-content">KIDS</span></a>
+                      </li>
+                      <li class="nav-item position-relative" role="presentation">
+                        <a class="nav-link nav-link_rline" href="#"><span class="rline-content">HOME</span></a>
+                      </li>
+                      <li class="nav-item position-relative" role="presentation">
+                        <a class="nav-link nav-link_rline" href="#"><span class="rline-content">COLLECTION</span></a>
+                      </li>
+                      <li class="nav-item position-relative" role="presentation">
+                        <a class="nav-link nav-link_rline text-red" href="#">SALE UP TO 50% OFF</a>
+                      </li>
+                      <li class="nav-item position-relative" role="presentation">
+                        <a class="nav-link nav-link_rline" href="#"><span class="rline-content">NEW</span></a>
+                      </li>
+                      <li class="nav-item position-relative" role="presentation">
+                        <a class="nav-link nav-link_rline" href="#"><span class="rline-content">SHOES</span></a>
+                      </li>
+                      <li class="nav-item position-relative" role="presentation">
+                        <a class="nav-link nav-link_rline" href="#"><span class="rline-content">ACCESSORIES</span></a>
+                      </li>
+                      <li class="nav-item position-relative" role="presentation">
+                        <a class="nav-link nav-link_rline" href="#"><span class="rline-content">JOIN LIFE</span></a>
+                      </li>
+                      <li class="nav-item position-relative" role="presentation">
+                        <a class="nav-link nav-link_rline" href="#"><span class="rline-content">#MOONSTYLE</span></a>
+                      </li>
+                    </ul>
+
+                    <div class="tab-content col-7" id="myTabContent">
+                      <div class="tab-pane fade show active" id="tab-item-1" role="tabpanel"
+                        aria-labelledby="tab-item-1-tab">
+                        <ul class="sub-menu list-unstyled">
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">New</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Best Sellers</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Collaborations®</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Sets</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Denim</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Jackets & Coats</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Overshirts</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Trousers</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Jeans</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Dresses</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Sweatshirts and Hoodies</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">T-shirts & Tops</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Shirts & Blouses</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Shorts and Bermudas</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Shoes</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="shop3.html" class="menu-link menu-link_us-s">Accessories</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Bags</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="about.html" class="menu-link menu-link_us-s">Gift Card</a>
+                          </li>
+                        </ul>
+                        <!-- /.sub-menu -->
+                      </div>
+                      <div class="tab-pane fade" id="tab-item-2" role="tabpanel" aria-labelledby="tab-item-2-tab">
+                        <ul class="sub-menu list-unstyled">
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Best Sellers</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">New</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Sets</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Denim</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Collaborations®</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Trousers</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Jackets & Coats</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Overshirts</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Dresses</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Jeans</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Sweatshirts and Hoodies</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="about.html" class="menu-link menu-link_us-s">Gift Card</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Shirts & Blouses</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">T-shirts & Tops</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Shorts and Bermudas</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="shop3.html" class="menu-link menu-link_us-s">Accessories</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Shoes</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Bags</a>
+                          </li>
+                        </ul>
+                        <!-- /.sub-menu -->
+                      </div>
+                      <div class="tab-pane fade" id="tab-item-3" role="tabpanel" aria-labelledby="tab-item-3-tab">
+                        <ul class="sub-menu list-unstyled">
+                          <li class="sub-menu__item">
+                            <a href="about.html" class="menu-link menu-link_us-s">Gift Card</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Collaborations®</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Sets</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Denim</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">New</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Best Sellers</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Overshirts</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Jackets & Coats</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Jeans</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Trousers</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Shorts and Bermudas</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Shoes</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="shop3.html" class="menu-link menu-link_us-s">Accessories</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Dresses</a>
+                          </li>
+                          <li class="sub-menu__item">
+                            <a href="#" class="menu-link menu-link_us-s">Bags</a>
+                          </li>
+                        </ul>
+                        <!-- /.sub-menu -->
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /.row -->
+                </div>
+                <div class="tab-pane fade" id="pills-item-2" role="tabpanel" aria-labelledby="pills-item-2-tab">
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit
+                    esse cillum dolore eu fugiat nulla pariatur.
+                  </p>
+                  Elementum lectus a porta commodo suspendisse arcu, aliquam
+                  lectus faucibus.
+                </div>
+                <div class="tab-pane fade" id="pills-item-3" role="tabpanel" aria-labelledby="pills-item-3-tab">
+                  <p>
+                    Sed ut perspiciatis unde omnis iste natus error sit
+                    voluptatem accusantium doloremque laudantium, totam rem
+                    aperiam, eaque ipsa quae ab illo inventore veritatis et
+                    quasi architecto beatae vitae dicta sunt explicabo. Nemo
+                    enim ipsam voluptatem quia voluptas sit aspernatur aut
+                    odit aut fugit, sed quia consequuntur magni dolores eos
+                    qui ratione voluptatem sequi nesciunt.
+                  </p>
+                  Ut enim ad minima veniam, quis nostrum exercitationem ullam
+                  corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
+                  consequatur?
+                </div>
+              </div>
+            </div>
+            <!-- /.modal-body -->
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.sitemap__links w-50 flex-grow-1 -->
+      </div>
+    </div>
+    <!-- /.modal-dialog modal-fullscreen -->
+  </div>
+  <!-- /.sitemap position-fixed w-100 -->
+
+  <!-- Quick View -->
+  <div class="modal fade" id="quickView" tabindex="-1">
+    <div class="modal-dialog quick-view modal-dialog-centered">
+      <div class="modal-content">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="product-single">
+          <div class="product-single__media m-0">
+            <div class="product-single__image position-relative w-100">
+              <div class="swiper-container js-swiper-slider" data-settings='{
+                  "slidesPerView": 1,
+                  "slidesPerGroup": 1,
+                  "effect": "none",
+                  "loop": false,
+                  "navigation": {
+                    "nextEl": ".modal-dialog.quick-view .product-single__media .swiper-button-next",
+                    "prevEl": ".modal-dialog.quick-view .product-single__media .swiper-button-prev"
+                  }
+                }'>
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide product-single__image-item">
+                    <img loading="lazy" src="../images/products/quickview_1.jpg" alt="" />
+                  </div>
+                  <div class="swiper-slide product-single__image-item">
+                    <img loading="lazy" src="../images/products/quickview_2.jpg" alt="" />
+                  </div>
+                  <div class="swiper-slide product-single__image-item">
+                    <img loading="lazy" src="../images/products/quickview_3.jpg" alt="" />
+                  </div>
+                  <div class="swiper-slide product-single__image-item">
+                    <img loading="lazy" src="../images/products/quickview_4.jpg" alt="" />
+                  </div>
+                </div>
+                <div class="swiper-button-prev">
+                  <svg width="7" height="11" viewBox="0 0 7 11" xmlns="http://www.w3.org/2000/svg">
+                    <use href="#icon_prev_sm" />
+                  </svg>
+                </div>
+                <div class="swiper-button-next">
+                  <svg width="7" height="11" viewBox="0 0 7 11" xmlns="http://www.w3.org/2000/svg">
+                    <use href="#icon_next_sm" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="product-single__detail">
+            <h1 class="product-single__name">
+              Lightweight Puffer Jacket With a Hood
+            </h1>
+            <div class="product-single__price">
+              <span class="current-price">$449</span>
+            </div>
+            <div class="product-single__short-desc">
+              <p>
+                Phasellus sed volutpat orci. Fusce eget lore mauris vehicula
+                elementum gravida nec dui. Aenean aliquam varius ipsum, non
+                ultricies tellus sodales eu. Donec dignissim viverra nunc, ut
+                aliquet magna posuere eget.
+              </p>
+            </div>
+            <form name="addtocart-form" method="post">
+              <div class="product-single__swatches">
+                <div class="product-swatch text-swatches">
+                  <label>Sizes</label>
+                  <div class="swatch-list">
+                    <input type="radio" name="size" id="swatch-1" />
+                    <label class="swatch js-swatch" for="swatch-1" aria-label="Extra Small" data-bs-toggle="tooltip"
+                      data-bs-placement="top" title="Extra Small">XS</label>
+                    <input type="radio" name="size" id="swatch-2" checked />
+                    <label class="swatch js-swatch" for="swatch-2" aria-label="Small" data-bs-toggle="tooltip"
+                      data-bs-placement="top" title="Small">S</label>
+                    <input type="radio" name="size" id="swatch-3" />
+                    <label class="swatch js-swatch" for="swatch-3" aria-label="Middle" data-bs-toggle="tooltip"
+                      data-bs-placement="top" title="Middle">M</label>
+                    <input type="radio" name="size" id="swatch-4" />
+                    <label class="swatch js-swatch" for="swatch-4" aria-label="Large" data-bs-toggle="tooltip"
+                      data-bs-placement="top" title="Large">L</label>
+                    <input type="radio" name="size" id="swatch-5" />
+                    <label class="swatch js-swatch" for="swatch-5" aria-label="Extra Large" data-bs-toggle="tooltip"
+                      data-bs-placement="top" title="Extra Large">XL</label>
+                  </div>
+                  <a href="#" class="sizeguide-link" data-bs-toggle="modal" data-bs-target="#sizeGuide">Size Guide</a>
+                </div>
+                <div class="product-swatch color-swatches">
+                  <label>Color</label>
+                  <div class="swatch-list">
+                    <input type="radio" name="color" id="swatch-11" />
+                    <label class="swatch swatch-color js-swatch" for="swatch-11" aria-label="Black"
+                      data-bs-toggle="tooltip" data-bs-placement="top" title="Black" style="color: #222"></label>
+                    <input type="radio" name="color" id="swatch-12" checked />
+                    <label class="swatch swatch-color js-swatch" for="swatch-12" aria-label="Red"
+                      data-bs-toggle="tooltip" data-bs-placement="top" title="Red" style="color: #c93a3e"></label>
+                    <input type="radio" name="color" id="swatch-13" />
+                    <label class="swatch swatch-color js-swatch" for="swatch-13" aria-label="Grey"
+                      data-bs-toggle="tooltip" data-bs-placement="top" title="Grey" style="color: #e4e4e4"></label>
+                  </div>
+                </div>
+              </div>
+              <div class="product-single__addtocart">
+                <div class="qty-control position-relative">
+                  <input type="number" name="quantity" value="1" min="1" class="qty-control__number text-center" />
+                  <div class="qty-control__reduce">-</div>
+                  <div class="qty-control__increase">+</div>
+                </div>
+                <!-- .qty-control -->
+                <button type="submit" class="btn btn-primary btn-addtocart js-open-aside" data-aside="cartDrawer">
+                  Add to Cart
+                </button>
+              </div>
+            </form>
+            <div class="product-single__addtolinks">
+              <a href="#" class="menu-link menu-link_us-s add-to-wishlist"><svg width="16" height="16"
+                  viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <use href="#icon_heart" />
+                </svg><span>Add to Wishlist</span></a>
+              <share-button class="share-button">
+                <button class="menu-link menu-link_us-s to-share border-0 bg-transparent d-flex align-items-center">
+                  <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <use href="#icon_sharing" />
+                  </svg>
+                </button>
+                <details id="Details-share-template__main" class="m-1 xl:m-1.5" hidden="">
+                  <summary class="btn-solid m-1 xl:m-1.5 pt-3.5 pb-3 px-5">
+                    +
+                  </summary>
+                  <div id="Article-share-template__main"
+                    class="share-button__fallback flex items-center absolute top-full left-0 w-full px-2 py-4 bg-container shadow-theme border-t z-10">
+                    <div class="field grow mr-4">
+                      <label class="field__label sr-only" for="url">Link</label>
+                      <input type="text" class="field__input w-full" id="url"
+                        value="https://uomo-crystal.myshopify.com/blogs/news/go-to-wellness-tips-for-mental-health"
+                        placeholder="Link" onclick="this.select();" readonly="" />
+                    </div>
+                    <button class="share-button__copy no-js-hidden">
+                      <svg class="icon icon-clipboard inline-block mr-1" width="11" height="13" fill="none"
+                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 11 13">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                          d="M2 1a1 1 0 011-1h7a1 1 0 011 1v9a1 1 0 01-1 1V1H2zM1 2a1 1 0 00-1 1v9a1 1 0 001 1h7a1 1 0 001-1V3a1 1 0 00-1-1H1zm0 10V3h7v9H1z"
+                          fill="currentColor"></path>
+                      </svg>
+                      <span class="sr-only">Copy link</span>
+                    </button>
+                  </div>
+                </details>
+              </share-button>
+              <script src="js/details-disclosure.js" defer="defer"></script>
+              <script src="js/share.js" defer="defer"></script>
+            </div>
+            <div class="product-single__meta-info mb-0">
+              <div class="meta-item">
+                <label>SKU:</label>
+                <span>N/A</span>
+              </div>
+              <div class="meta-item">
+                <label>Categories:</label>
+                <span>Casual & Urban Wear, Jackets, Men</span>
+              </div>
+              <div class="meta-item">
+                <label>Tags:</label>
+                <span>biker, black, bomber, leather</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.quickview position-fixed -->
+
+  <!-- Go To Top -->
   <div id="scrollTop" class="visually-hidden end-0"></div>
 
+  <!-- Page Overlay -->
   <div class="page-overlay"></div>
   <!-- /.page-overlay -->
 
@@ -2615,6 +2015,6 @@
 
 </body>
 
-<!-- Mirrored from uomo-html.flexkitux.com/Demo1/product1_simple.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 03 Mar 2025 14:38:50 GMT -->
+<!-- Mirrored from uomo-html.flexkitux.com/Demo1/shop_cart.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 03 Mar 2025 14:38:50 GMT -->
 
 </html>
