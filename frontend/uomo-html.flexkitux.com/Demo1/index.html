@@ -1089,10 +1089,10 @@
             <label>Sắp xếp:</label>
             <select id="sortFilter">
               <option value="default">Mặc định</option>
-              <option value="price-asc">Giá tăng dần</option>
-              <option value="price-desc">Giá giảm dần</option>
-              <option value="name-asc">Tên A-Z</option>
-              <option value="name-desc">Tên Z-A</option>
+              <option value="price-asc">Giá: Thấp đến Cao</option>
+              <option value="price-desc">Giá: Cao đến Thấp</option>
+              <option value="name-asc">Tên: A-Z</option>
+              <option value="name-desc">Tên: Z-A</option>
             </select>
           </div>
         </div>
@@ -2982,7 +2982,347 @@
 
   <script src="js/script.js"></script>
 
+  <!-- tim kiem -->
+  <script>
 
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchInput = document.getElementById("searchInput");
+      const priceFilter = document.getElementById("priceFilter");
+      const sortFilter = document.getElementById("sortFilter");
+      const productCards = document.querySelectorAll(".product-card");
+
+      function filterProducts() {
+        const searchQuery = searchInput.value.toLowerCase().removeDiacritics();
+        const priceRange = priceFilter.value;
+        const sortOption = sortFilter.value;
+
+        let filteredProducts = Array.from(productCards);
+
+        const price = priceElement ? parseInt(priceElement.textContent.replace(/\D/g, ""), 10) : 0;
+        filteredProducts = filteredProducts.filter((card) => {
+          const title = card.querySelector(".pc__title a").textContent.toLowerCase().removeDiacritics();
+          const category = card.querySelector(".pc__category").textContent.toLowerCase().removeDiacritics();
+          return title.includes(searchQuery) || category.includes(searchQuery);
+        });
+
+        // Filter by price range
+        if (priceRange) {
+          const [minPrice, maxPrice] = priceRange.split(".").map(Number);
+          filteredProducts = filteredProducts.filter((card) => {
+            const priceElement = card.querySelector(".price-sale") || card.querySelector(".price");
+            const price = priceElement ? parseInt(priceElement.textContent.replace(/\D/g, ""), 10) : 0;
+            return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice);
+          });
+        }
+
+
+
+        // Hide all products and show only filtered ones
+        productCards.forEach((card) => card.parentElement.classList.add("d-none"));
+        filteredProducts.forEach((card) => card.parentElement.classList.remove("d-none"));
+      }
+
+      searchInput.addEventListener("input", filterProducts);
+      priceFilter.addEventListener("change", filterProducts);
+      sortFilter.addEventListener("change", filterProducts);
+    });
+    String.prototype.removeDiacritics = function () {
+      return this.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    };
+
+
+
+
+    //loc va sap xep
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchInput = document.getElementById("searchInput");
+      const priceFilter = document.getElementById("priceFilter");
+      const sortFilter = document.getElementById("sortFilter");
+      const tabContents = document.querySelectorAll(".tab-pane");
+
+      function filterAndSortProducts() {
+        const searchQuery = searchInput.value.toLowerCase();
+        const priceRange = priceFilter.value;
+        const sortOption = sortFilter.value;
+
+        tabContents.forEach((tabContent) => {
+          const productCards = tabContent.querySelectorAll(".product-card");
+          const [minPrice, maxPrice] = priceRange ? priceRange.split("-").map(Number) : [null, null];
+          let filteredProducts = Array.from(productCards);
+
+          // Filter by search query
+          filteredProducts = filteredProducts.filter((card) => {
+            const title = card.querySelector(".pc__title a").textContent.toLowerCase();
+            const category = card.querySelector(".pc__category").textContent.toLowerCase();
+            return title.includes(searchQuery) || category.includes(searchQuery);
+          });
+
+          // Filter by price range
+          if (priceRange) {
+            const [minPrice, maxPrice] = priceRange.split("-").map(Number);
+            filteredProducts = filteredProducts.filter((card) => {
+              const priceElement = card.querySelector(".price-sale") || card.querySelector(".price");
+              const price = parseInt(priceElement.textContent.replace(/\D/g, ""), 10);
+              return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice);
+            });
+          }
+
+          // Sort products
+          if (sortOption) {
+            filteredProducts.sort((a, b) => {
+              const getPrice = (card) => {
+                const priceElement = card.querySelector(".price-sale") || card.querySelector(".price");
+                return parseInt(priceElement?.textContent.replace(/\D/g, ""), 10) || 0;
+              };
+              const getName = (card) => card.querySelector(".pc__title a")?.textContent.toLowerCase() || "";
+
+              switch (sortOption) {
+                case "price-asc":
+                  return getPrice(a) - getPrice(b);
+                case "price-desc":
+                  return getPrice(b) - getPrice(a);
+                case "name-asc":
+                  return getName(a).localeCompare(getName(b));
+                case "name-desc":
+                  return getName(b).localeCompare(getName(a));
+                default:
+                  return 0;
+              }
+            });
+          }
+
+          // Hide all products and show only filtered ones
+          productCards.forEach((card) => card.parentElement.classList.add("d-none"));
+          filteredProducts.forEach((card) => card.parentElement.classList.remove("d-none"));
+        });
+      }
+
+      searchInput.addEventListener("input", filterAndSortProducts);
+      priceFilter.addEventListener("change", filterAndSortProducts);
+      sortFilter.addEventListener("change", filterAndSortProducts);
+    });
+    // Filter and sort products
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchInput = document.getElementById("searchInput");
+      const priceFilter = document.getElementById("priceFilter");
+      const sortFilter = document.getElementById("sortFilter");
+      const tabContents = document.querySelectorAll(".tab-pane");
+
+      function filterAndSortProducts() {
+        const searchQuery = searchInput.value.toLowerCase().removeDiacritics();
+        const priceRange = priceFilter.value;
+        const sortOption = sortFilter.value;
+
+        tabContents.forEach((tabContent) => {
+          const productCards = tabContent.querySelectorAll(".product-card");
+          let filteredProducts = Array.from(productCards);
+
+          // Filter by search query
+          filteredProducts = filteredProducts.filter((card) => {
+            const title = card.querySelector(".pc__title a").textContent.toLowerCase().removeDiacritics();
+            const category = card.querySelector(".pc__category").textContent.toLowerCase().removeDiacritics();
+            return title.includes(searchQuery) || category.includes(searchQuery);
+          });
+
+          // Filter by price range
+          if (priceRange) {
+            const [minPrice, maxPrice] = priceRange.split("-").map(Number);
+            filteredProducts = filteredProducts.filter((card) => {
+              const priceElement = card.querySelector(".price-sale") || card.querySelector(".price");
+              const price = parseInt(priceElement.textContent.replace(/\D/g, ""), 10);
+              return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice);
+            });
+          }
+
+          // Sort products
+          if (sortOption !== "default") {
+            filteredProducts.sort((a, b) => {
+              const getPrice = (card) => {
+                const priceElement = card.querySelector(".price-sale") || card.querySelector(".price");
+                return priceElement ? parseInt(priceElement.textContent.replace(/\D/g, ""), 10) : 0;
+              };
+              const getName = (card) => {
+                const titleElement = card.querySelector(".pc__title a");
+                return titleElement ? titleElement.textContent.toLowerCase().removeDiacritics() : "";
+              };
+
+              if (sortOption === "price-asc") {
+                return getPrice(a) - getPrice(b);
+              } else if (sortOption === "price-desc") {
+                return getPrice(b) - getPrice(a);
+              } else if (sortOption === "name-asc") {
+                return getName(a).localeCompare(getName(b));
+              } else if (sortOption === "name-desc") {
+                return getName(b).localeCompare(getName(a));
+              } else {
+                return 0;
+              }
+            });
+          }
+
+          // Hide all products and show only filtered ones
+          productCards.forEach((card) => card.parentElement.classList.add("d-none"));
+          filteredProducts.forEach((card) => card.parentElement.classList.remove("d-none"));
+        });
+      }
+
+      searchInput.addEventListener("input", filterAndSortProducts);
+      priceFilter.addEventListener("change", filterAndSortProducts);
+      sortFilter.addEventListener("change", filterAndSortProducts);
+    });
+
+    String.prototype.removeDiacritics = function () {
+      return this.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    };
+
+
+    // Combine filtering and sorting functionality
+    function filterAndSortProducts() {
+      const searchQuery = searchInput.value.toLowerCase().removeDiacritics();
+      const priceRange = priceFilter.value;
+      const sortOption = sortFilter.value;
+
+      tabContents.forEach((tabContent) => {
+        const productCards = tabContent.querySelectorAll(".product-card");
+        let filteredProducts = Array.from(productCards);
+
+        // Filter by search query
+        filteredProducts = filteredProducts.filter((card) => {
+          const title = card.querySelector(".pc__title a").textContent.toLowerCase().removeDiacritics();
+          const category = card.querySelector(".pc__category").textContent.toLowerCase().removeDiacritics();
+          return title.includes(searchQuery) || category.includes(searchQuery);
+        });
+
+        // Filter by price range
+        if (priceRange) {
+          const [minPrice, maxPrice] = priceRange.split("-").map(Number);
+          filteredProducts = filteredProducts.filter((card) => {
+            const priceElement = card.querySelector(".price-sale") || card.querySelector(".price");
+            const price = parseInt(priceElement.textContent.replace(/\D/g, ""), 10);
+            return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice);
+          });
+        }
+
+        // Sort products
+        if (sortOption !== "default") {
+          filteredProducts.sort((a, b) => {
+            const getPrice = (card) => {
+              const priceElement = card.querySelector(".price-sale") || card.querySelector(".price");
+              return parseInt(priceElement.textContent.replace(/\D/g, ""), 10);
+            };
+            const getName = (card) => card.querySelector(".pc__title a").textContent.toLowerCase().removeDiacritics();
+
+            if (sortOption === "price-asc") {
+              return getPrice(a) - getPrice(b);
+            } else if (sortOption === "price-desc") {
+              return getPrice(b) - getPrice(a);
+            } else if (sortOption === "name-asc") {
+              return getName(a).localeCompare(getName(b));
+            } else if (sortOption === "name-desc") {
+              return getName(b).localeCompare(getName(a));
+            } else {
+              return 0;
+            }
+          });
+        }
+
+        // Hide all products and show only filtered ones
+        productCards.forEach((card) => card.parentElement.classList.add("d-none"));
+        filteredProducts.forEach((card) => card.parentElement.classList.remove("d-none"));
+      });
+    }
+
+
+
+    // Attach event listeners
+    searchInput.addEventListener("input", filterAndSortProducts);
+    priceFilter.addEventListener("change", filterAndSortProducts);
+    sortFilter.addEventListener("change", filterAndSortProducts);
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchInput = document.getElementById("searchInput");
+      const priceFilter = document.getElementById("priceFilter");
+      const sortFilter = document.getElementById("sortFilter");
+      const tabContents = document.querySelectorAll(".tab-pane");
+
+      // Function to filter products
+      function filterProducts() {
+        const searchQuery = searchInput.value.toLowerCase().removeDiacritics();
+        const priceRange = priceFilter.value;
+
+        tabContents.forEach((tabContent) => {
+          const productCards = tabContent.querySelectorAll(".product-card");
+          let filteredProducts = Array.from(productCards);
+
+          // Filter by search query
+          filteredProducts = filteredProducts.filter((card) => {
+            const title = card.querySelector(".pc__title a").textContent.toLowerCase().removeDiacritics();
+            const category = card.querySelector(".pc__category").textContent.toLowerCase().removeDiacritics();
+            return title.includes(searchQuery) || category.includes(searchQuery);
+          });
+
+          // Filter by price range
+          if (priceRange) {
+            const [minPrice, maxPrice] = priceRange.split("-").map(Number);
+            filteredProducts = filteredProducts.filter((card) => {
+              const priceElement = card.querySelector(".price-sale") || card.querySelector(".price");
+              const price = parseInt(priceElement.textContent.replace(/\D/g, ""), 10);
+              return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice);
+            });
+          }
+
+          // Hide all products and show only filtered ones
+          productCards.forEach((card) => card.parentElement.classList.add("d-none"));
+          filteredProducts.forEach((card) => card.parentElement.classList.remove("d-none"));
+        });
+      }
+
+      // Function to sort products
+      function sortProducts() {
+        const sortOption = sortFilter.value;
+
+        tabContents.forEach((tabContent) => {
+          const productCards = Array.from(tabContent.querySelectorAll(".product-card"));
+
+          if (sortOption !== "default") {
+            productCards.sort((a, b) => {
+              const getPrice = (card) => {
+                const priceElement = card.querySelector(".price-sale") || card.querySelector(".price");
+                return parseInt(priceElement.textContent.replace(/\D/g, ""), 10);
+              };
+              const getName = (card) => card.querySelector(".pc__title a").textContent.toLowerCase().removeDiacritics();
+
+              if (sortOption === "price-asc") {
+                return getPrice(a) - getPrice(b);
+              } else if (sortOption === "price-desc") {
+                return getPrice(b) - getPrice(a);
+              } else if (sortOption === "name-asc") {
+                return getName(a).localeCompare(getName(b));
+              } else if (sortOption === "name-desc") {
+                return getName(b).localeCompare(getName(a));
+              } else {
+                return 0;
+              }
+            });
+
+            // Reorder the products in the DOM
+            const parentContainer = tabContent.querySelector(".row");
+            productCards.forEach((card) => parentContainer.appendChild(card.parentElement));
+          }
+        });
+      }
+
+      // Attach event listeners
+      searchInput.addEventListener("input", filterProducts);
+      priceFilter.addEventListener("change", filterProducts);
+      sortFilter.addEventListener("change", sortProducts);
+
+      // Utility function to remove diacritics
+      String.prototype.removeDiacritics = function () {
+        return this.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      };
+    });
+  </script>
 </body>
 
 </html>
