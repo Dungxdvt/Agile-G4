@@ -35,6 +35,14 @@
 
         .payment-filters {
             margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 15px;
         }
 
         .filter-options select {
@@ -42,6 +50,13 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             min-width: 200px;
+        }
+
+        .search-box {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-width: 250px;
         }
 
         .orders-table {
@@ -61,6 +76,28 @@
             font-weight: 600;
         }
 
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-failed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
         .btn-primary {
             background-color: #007bff;
             border: none;
@@ -72,6 +109,29 @@
 
         .btn-primary:hover {
             background-color: #0056b3;
+        }
+
+        .payment-details {
+            display: none;
+            background: #f8f9fa;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        .payment-details.show {
+            display: block;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .payment-method img {
+            width: 24px;
+            height: 24px;
         }
     </style>
 </head>
@@ -205,13 +265,20 @@
                     <!-- Filter Section -->
                     <div class="payment-filters">
                         <div class="filter-options">
-                            <select>
+                            <select id="status-filter">
                                 <option value="all">Tất cả giao dịch</option>
                                 <option value="success">Thành công</option>
                                 <option value="pending">Đang xử lý</option>
                                 <option value="failed">Thất bại</option>
                             </select>
+                            <select id="date-filter">
+                                <option value="all">Tất cả thời gian</option>
+                                <option value="today">Hôm nay</option>
+                                <option value="week">7 ngày qua</option>
+                                <option value="month">30 ngày qua</option>
+                            </select>
                         </div>
+                        <input type="text" class="search-box" placeholder="Tìm kiếm theo mã đơn hàng...">
                     </div>
 
                     <!-- Payment List -->
@@ -222,6 +289,7 @@
                                     <th>Mã đơn hàng</th>
                                     <th>Thời gian</th>
                                     <th>Tên sản phẩm</th>
+                                    <th>Phương thức thanh toán</th>
                                     <th>Trạng thái</th>
                                     <th>Tổng tiền</th>
                                     <th>Thao tác</th>
@@ -419,6 +487,14 @@
             { name: "Zessi Dresses", price: "99.000" }
         ];
 
+        // Danh sách phương thức thanh toán
+        const paymentMethods = [
+            { name: "Thẻ tín dụng", icon: "💳" },
+            { name: "Chuyển khoản ngân hàng", icon: "🏦" },
+            { name: "Ví điện tử", icon: "📱" },
+            { name: "Tiền mặt", icon: "💵" }
+        ];
+
         // Lấy dữ liệu từ account_orders.html
         $(document).ready(function () {
             $.get('account_orders.html', function (data) {
@@ -427,24 +503,68 @@
                     $orders.each(function () {
                         var $row = $(this);
                         var orderId = $row.find('td:first').text();
-                        var date = new Date().toLocaleString('vi-VN'); // Thời gian hiện tại
+                        var date = new Date().toLocaleString('vi-VN');
                         var randomProduct = products[Math.floor(Math.random() * products.length)];
+                        var randomPaymentMethod = paymentMethods[Math.floor(Math.random() * paymentMethods.length)];
                         var status = $row.find('td:eq(2)').text();
                         var total = randomProduct.price;
+
+                        var statusClass = '';
+                        var statusText = '';
+                        switch (status.toLowerCase()) {
+                            case 'completed':
+                                statusClass = 'status-success';
+                                statusText = 'Thành công';
+                                break;
+                            case 'processing':
+                                statusClass = 'status-pending';
+                                statusText = 'Đang xử lý';
+                                break;
+                            default:
+                                statusClass = 'status-failed';
+                                statusText = 'Thất bại';
+                        }
 
                         var $newRow = $('<tr>');
                         $newRow.append($('<td>').text(orderId));
                         $newRow.append($('<td>').text(date));
                         $newRow.append($('<td>').text(randomProduct.name));
-                        $newRow.append($('<td>').text(status));
+                        $newRow.append($('<td>').html(`<div class="payment-method">${randomPaymentMethod.icon} ${randomPaymentMethod.name}</div>`));
+                        $newRow.append($('<td>').html(`<span class="status-badge ${statusClass}">${statusText}</span>`));
                         $newRow.append($('<td>').text(total + 'đ'));
-                        $newRow.append($('<td>').html('<button class="btn btn-primary">XEM</button>'));
+                        $newRow.append($('<td>').html('<button class="btn btn-primary view-details">XEM CHI TIẾT</button>'));
+
+                        // Thêm phần chi tiết thanh toán
+                        var $detailsRow = $('<tr>');
+                        var $detailsCell = $('<td colspan="7">');
+                        var $details = $('<div class="payment-details">');
+                        $details.append(`<p><strong>Địa chỉ giao hàng:</strong> 123 Đường ABC, Quận XYZ, TP.HCM</p>`);
+                        $details.append(`<p><strong>Ghi chú:</strong> Giao hàng giờ hành chính</p>`);
+                        $details.append(`<p><strong>Thời gian giao hàng dự kiến:</strong> ${new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('vi-VN')}</p>`);
+                        $detailsCell.append($details);
+                        $detailsRow.append($detailsCell);
 
                         $('#payment-list').append($newRow);
+                        $('#payment-list').append($detailsRow);
+
+                        // Xử lý sự kiện click nút xem chi tiết
+                        $newRow.find('.view-details').click(function () {
+                            $details.toggleClass('show');
+                        });
                     });
                 } else {
-                    $('#payment-list').html('<tr><td colspan="6" class="text-center">Không có giao dịch nào</td></tr>');
+                    $('#payment-list').html('<tr><td colspan="7" class="text-center">Không có giao dịch nào</td></tr>');
                 }
+            });
+
+            // Xử lý sự kiện lọc
+            $('#status-filter, #date-filter').change(function () {
+                // Implement filtering logic here
+            });
+
+            // Xử lý sự kiện tìm kiếm
+            $('.search-box').on('input', function () {
+                // Implement search logic here
             });
         });
     </script>
