@@ -133,6 +133,37 @@
             width: 24px;
             height: 24px;
         }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .pagination button.active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .pagination button:hover:not(.active) {
+            background: #f8f9fa;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
     </style>
 </head>
 
@@ -299,6 +330,9 @@
                                 <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
                             </tbody>
                         </table>
+                        <div id="pagination" class="pagination">
+                            <!-- Phân trang sẽ được thêm vào đây -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -495,77 +529,178 @@
             { name: "Tiền mặt", icon: "💵" }
         ];
 
-        // Lấy dữ liệu từ account_orders.html
-        $(document).ready(function () {
-            $.get('account_orders.html', function (data) {
-                var $orders = $(data).find('.orders-table tbody tr');
-                if ($orders.length > 0) {
-                    $orders.each(function () {
-                        var $row = $(this);
-                        var orderId = $row.find('td:first').text();
-                        var date = new Date().toLocaleString('vi-VN');
-                        var randomProduct = products[Math.floor(Math.random() * products.length)];
-                        var randomPaymentMethod = paymentMethods[Math.floor(Math.random() * paymentMethods.length)];
-                        var status = $row.find('td:eq(2)').text();
-                        var total = randomProduct.price;
+        // Dữ liệu mẫu cho lịch sử đơn hàng
+        const sampleOrders = [
+            { id: "DH001", date: "2025-04-22", status: "success", product: 0, payment: 0 },  // Hôm nay
+            { id: "DH002", date: "2025-04-21", status: "pending", product: 1, payment: 1 },  // 1 ngày trước
+            { id: "DH003", date: "2025-04-20", status: "failed", product: 2, payment: 2 },   // 2 ngày trước
+            { id: "DH004", date: "2025-04-19", status: "success", product: 3, payment: 3 },  // 3 ngày trước
+            { id: "DH005", date: "2025-04-18", status: "pending", product: 4, payment: 0 },  // 4 ngày trước
+            { id: "DH006", date: "2025-04-15", status: "failed", product: 5, payment: 1 },   // 7 ngày trước
+            { id: "DH007", date: "2025-04-10", status: "success", product: 6, payment: 2 },  // 12 ngày trước
+            { id: "DH008", date: "2025-04-05", status: "pending", product: 0, payment: 3 },  // 17 ngày trước
+            { id: "DH009", date: "2025-04-01", status: "failed", product: 1, payment: 0 },   // 21 ngày trước
+            { id: "DH010", date: "2025-03-25", status: "success", product: 2, payment: 1 }   // 28 ngày trước
+        ];
 
-                        var statusClass = '';
-                        var statusText = '';
-                        switch (status.toLowerCase()) {
-                            case 'completed':
-                                statusClass = 'status-success';
-                                statusText = 'Thành công';
-                                break;
-                            case 'processing':
-                                statusClass = 'status-pending';
-                                statusText = 'Đang xử lý';
-                                break;
-                            default:
-                                statusClass = 'status-failed';
-                                statusText = 'Thất bại';
-                        }
+        // Cấu hình phân trang
+        const itemsPerPage = 5;
+        let currentPage = 1;
+        let filteredOrders = [...sampleOrders];
 
-                        var $newRow = $('<tr>');
-                        $newRow.append($('<td>').text(orderId));
-                        $newRow.append($('<td>').text(date));
-                        $newRow.append($('<td>').text(randomProduct.name));
-                        $newRow.append($('<td>').html(`<div class="payment-method">${randomPaymentMethod.icon} ${randomPaymentMethod.name}</div>`));
-                        $newRow.append($('<td>').html(`<span class="status-badge ${statusClass}">${statusText}</span>`));
-                        $newRow.append($('<td>').text(total + 'đ'));
-                        $newRow.append($('<td>').html('<button class="btn btn-primary view-details">XEM CHI TIẾT</button>'));
+        // Hàm hiển thị đơn hàng
+        function displayOrders(orders, page) {
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedOrders = orders.slice(start, end);
 
-                        // Thêm phần chi tiết thanh toán
-                        var $detailsRow = $('<tr>');
-                        var $detailsCell = $('<td colspan="7">');
-                        var $details = $('<div class="payment-details">');
-                        $details.append(`<p><strong>Địa chỉ giao hàng:</strong> 123 Đường ABC, Quận XYZ, TP.HCM</p>`);
-                        $details.append(`<p><strong>Ghi chú:</strong> Giao hàng giờ hành chính</p>`);
-                        $details.append(`<p><strong>Thời gian giao hàng dự kiến:</strong> ${new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('vi-VN')}</p>`);
-                        $detailsCell.append($details);
-                        $detailsRow.append($detailsCell);
+            $('#payment-list').empty();
 
-                        $('#payment-list').append($newRow);
-                        $('#payment-list').append($detailsRow);
+            if (paginatedOrders.length === 0) {
+                $('#payment-list').html('<tr><td colspan="7" class="no-results">Không tìm thấy đơn hàng nào</td></tr>');
+                return;
+            }
 
-                        // Xử lý sự kiện click nút xem chi tiết
-                        $newRow.find('.view-details').click(function () {
-                            $details.toggleClass('show');
-                        });
-                    });
-                } else {
-                    $('#payment-list').html('<tr><td colspan="7" class="text-center">Không có giao dịch nào</td></tr>');
+            paginatedOrders.forEach(order => {
+                const product = products[order.product];
+                const paymentMethod = paymentMethods[order.payment];
+
+                let statusClass = '';
+                let statusText = '';
+                switch (order.status) {
+                    case 'success':
+                        statusClass = 'status-success';
+                        statusText = 'Thành công';
+                        break;
+                    case 'pending':
+                        statusClass = 'status-pending';
+                        statusText = 'Đang xử lý';
+                        break;
+                    case 'failed':
+                        statusClass = 'status-failed';
+                        statusText = 'Thất bại';
+                        break;
                 }
+
+                const $newRow = $('<tr>');
+                $newRow.append($('<td>').text(order.id));
+                $newRow.append($('<td>').text(new Date(order.date).toLocaleString('vi-VN')));
+                $newRow.append($('<td>').text(product.name));
+                $newRow.append($('<td>').html(`<div class="payment-method">${paymentMethod.icon} ${paymentMethod.name}</div>`));
+                $newRow.append($('<td>').html(`<span class="status-badge ${statusClass}">${statusText}</span>`));
+                $newRow.append($('<td>').text(product.price + 'đ'));
+                $newRow.append($('<td>').html('<button class="btn btn-primary view-details">XEM CHI TIẾT</button>'));
+
+                // Thêm phần chi tiết thanh toán
+                const $detailsRow = $('<tr>');
+                const $detailsCell = $('<td colspan="7">');
+                const $details = $('<div class="payment-details">');
+                $details.append(`<p><strong>Địa chỉ giao hàng:</strong> 123 Đường ABC, Quận XYZ, TP.HCM</p>`);
+                $details.append(`<p><strong>Ghi chú:</strong> Giao hàng giờ hành chính</p>`);
+                $details.append(`<p><strong>Thời gian giao hàng dự kiến:</strong> ${new Date(new Date(order.date).getTime() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('vi-VN')}</p>`);
+                $detailsCell.append($details);
+                $detailsRow.append($detailsCell);
+
+                $('#payment-list').append($newRow);
+                $('#payment-list').append($detailsRow);
+
+                // Xử lý sự kiện click nút xem chi tiết
+                $newRow.find('.view-details').click(function () {
+                    $details.toggleClass('show');
+                });
             });
+
+            // Hiển thị phân trang
+            displayPagination(orders.length);
+        }
+
+        // Hàm hiển thị phân trang
+        function displayPagination(totalItems) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const $pagination = $('#pagination');
+            $pagination.empty();
+
+            // Nút Previous
+            if (currentPage > 1) {
+                $pagination.append(`<button onclick="changePage(${currentPage - 1})">Trước</button>`);
+            }
+
+            // Các nút số trang
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    $pagination.append(`<button class="active">${i}</button>`);
+                } else {
+                    $pagination.append(`<button onclick="changePage(${i})">${i}</button>`);
+                }
+            }
+
+            // Nút Next
+            if (currentPage < totalPages) {
+                $pagination.append(`<button onclick="changePage(${currentPage + 1})">Sau</button>`);
+            }
+        }
+
+        // Hàm chuyển trang
+        function changePage(page) {
+            currentPage = page;
+            displayOrders(filteredOrders, currentPage);
+        }
+
+        // Hàm lọc đơn hàng
+        function filterOrders() {
+            const statusFilter = $('#status-filter').val();
+            const dateFilter = $('#date-filter').val();
+            const searchText = $('.search-box').val().toLowerCase();
+
+            // Set ngày hiện tại là 22/04/2025
+            const today = new Date('2025-04-22');
+
+            filteredOrders = sampleOrders.filter(order => {
+                let statusMatch = true;
+                let dateMatch = true;
+                let searchMatch = true;
+
+                if (statusFilter !== 'all') {
+                    statusMatch = order.status === statusFilter;
+                }
+
+                if (dateFilter !== 'all') {
+                    const orderDate = new Date(order.date);
+                    const diffDays = Math.floor((today - orderDate) / (1000 * 60 * 60 * 24));
+
+                    switch (dateFilter) {
+                        case 'today':
+                            dateMatch = diffDays === 0;  // Chỉ hiện đơn hàng hôm nay (22/04)
+                            break;
+                        case 'week':
+                            dateMatch = diffDays <= 7;   // Hiện đơn hàng 7 ngày gần nhất (16/04 - 22/04)
+                            break;
+                        case 'month':
+                            dateMatch = diffDays <= 30;  // Hiện đơn hàng 30 ngày gần nhất (23/03 - 22/04)
+                            break;
+                    }
+                }
+
+                if (searchText) {
+                    searchMatch = order.id.toLowerCase().includes(searchText);
+                }
+
+                return statusMatch && dateMatch && searchMatch;
+            });
+
+            currentPage = 1;
+            displayOrders(filteredOrders, currentPage);
+        }
+
+        // Khởi tạo trang
+        $(document).ready(function () {
+            displayOrders(sampleOrders, currentPage);
 
             // Xử lý sự kiện lọc
-            $('#status-filter, #date-filter').change(function () {
-                // Implement filtering logic here
-            });
+            $('#status-filter, #date-filter').change(filterOrders);
 
             // Xử lý sự kiện tìm kiếm
-            $('.search-box').on('input', function () {
-                // Implement search logic here
-            });
+            $('.search-box').on('input', filterOrders);
         });
     </script>
 
